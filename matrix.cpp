@@ -102,7 +102,7 @@ public:
   int getnR(){return num_rows;};
   int getnC(){return num_col;};
 //doaa & zienab
-  double getDeteminant();
+  double getDeterminant();
   double getTranspose();
   double getInverse();
 
@@ -447,7 +447,7 @@ void Matrix::setSubMatrix(int r, int c, Matrix& m)
 
 Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
 {
-  if((r+nr)>num_rows || (c+nc)>num_col)throw("Invalid matrix dimension");
+  if((r+nr)>num_rows || (c+nc)>num_col  )throw("Invalid matrix dimension");
 
   Matrix m(nr, nc);
   for(int iR=0;iR<m.num_rows;iR++)
@@ -457,8 +457,76 @@ Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
 }
 
 
+void Matrix::addColumn(Matrix& m)
+{
+  Matrix n(max(num_rows, m.num_rows), num_col+m.num_col);
+  n.setSubMatrix(0, 0, *this);
+  n.setSubMatrix(0, num_col, m);
+  *this = n;
+}
+
+void Matrix::addRow(Matrix& m)
+{
+  Matrix n(num_rows+n.num_rows, max(num_col,m.num_col));
+  n.setSubMatrix(0, 0, *this);
+  n.setSubMatrix(num_rows, 0, m);
+  *this = n;
+}
+
+
+Matrix Matrix::getCofactor(int r, int c)
+{
+  if(num_rows<=1 || num_col<=1)throw("Invalid matrix dimensions");
+
+  Matrix m(num_rows-1, num_col-1);
+
+  for(int iR=0; iR<m.num_rows; iR++)
+    for(int iC=0; iC<m.num_col; iC++)
+    {
+      int sR = (iR<r)? iR : iR+1;
+      int sC = (iC<c)? iC : iC+1;
+      m.values[iR][iC] = values[sR][sC];
+    }
+    return m;
+}
+
+
+double Matrix::getDeterminant()
+{
+  if(num_rows!=num_col)throw("Invalid matrix dimensions");
+  if(num_rows==1 && num_col==1)return values[0][0];
+
+  double value = 0 , m = 1;
+  for(int iR=0; iR<num_rows; iR++)
+  {
+    value+= m * values[0][iR] * getCofactor(0, iR).getDeterminant(); m *= -1;
+  }
+  return value;
+}
+
+/*
+istream& operator >> (istream &is, Matrix& m)
+{
+  string s;
+  getline(is, s, ']');
+  s+="]";
+  m = Matrix(s);
+  return is;
+}
+
+ostream& operator << (ostream &os, Matrix& m)
+{
+  os<<m.getString();
+  return os;
+}
+
+*/
+
 int main()
 {
+  Matrix m(2, 2, 1,2,3,4);
+  Matrix n(2, 2, 1,2,3,4);
+  m+n ; 
 
   return 0;
 }
