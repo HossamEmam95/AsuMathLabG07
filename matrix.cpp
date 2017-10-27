@@ -35,7 +35,7 @@ public:
 //rawan
   void copy(Matrix& m);
   void copy(double d);
-  //void copy(string s);
+  void copy(string s);
   void reset();
 
   string getString();
@@ -45,14 +45,14 @@ public:
   Matrix operator=(string s);
 
 //hossam
-  void add(Matrix& m);
+  void add(const Matrix& m);
   void operator+=(Matrix& m);
   void operator+=(double d);
   Matrix operator+(Matrix& m);
   Matrix operator+(double d);
 
 
-  void sub(Matrix& m);
+  void sub(const Matrix& m);
   void operator-=(Matrix& m);
   void operator-=(double d);
   Matrix operator-(Matrix& m);
@@ -195,6 +195,37 @@ void Matrix::copy(Matrix& m)
   }
 }
 
+/*
+void Matrix::copy(string s)
+{
+  reset();
+
+  char* buffer = new char[s.length()+1];
+  strcpy(buffer, s.c_str());
+  char* lineContext;
+  const char* lineSeparators = ";\r\n";
+  char* line = strtok_r(buffer, lineSeparators, &lineContext);
+  while(line)
+    {
+      Matrix row;
+      char* context;
+      const char* separators = " []";
+      char* token = strtok_r(line, separators, &context);
+        while(token)
+        {
+          Matrix item = atof(token);
+          row.addColumn(item);
+          token = strtok_r(NULL, separators, &context);
+        }
+        if(row.num_col>0 && (row.num_col==num_col || num_rows==0))
+        addRow(row);
+        line = strtok_r(NULL, lineSeparators, &lineContext);
+    }
+    delete[] buffer;
+  }
+
+*/
+
 Matrix::Matrix(double d)
 {
   num_rows = num_rows = 0;
@@ -240,7 +271,7 @@ Matrix Matrix::operator=(double d)
   return *this;
 }
 
-void Matrix::add(Matrix& m)
+void Matrix::add(const Matrix& m)
 {
   if(num_rows!=m.num_rows||num_col!=m.num_col)
     throw("Invalid Matrix dimensions for add operation");
@@ -255,12 +286,12 @@ void Matrix::operator+=(Matrix& m)
   add(m);
 }
 
-/*
+
 void Matrix::operator+=(double d)
 {
   add(Matrix(num_rows, num_col, MI_VALUE, d));
 }
-*/
+
 
 Matrix Matrix::operator+(Matrix& m)
 {
@@ -269,16 +300,16 @@ Matrix Matrix::operator+(Matrix& m)
   return r;
 }
 
-/*
+
 Matrix Matrix::operator+(double d)
 {
   Matrix r = *this;
   r += d;
   return r;
 }
-*/
 
-void Matrix::sub(Matrix& m)
+
+void Matrix::sub(const Matrix& m)
 {
   if(num_rows!=m.num_rows||num_col!=m.num_col)
     throw("Invalid Matrix dimensions for sub operation");
@@ -293,12 +324,12 @@ void Matrix::operator-=(Matrix& m)
   sub(m);
 }
 
-/*
+
 void Matrix::operator-=(double d)
 {
   sub(Matrix(num_rows, num_col, MI_VALUE, d));
 }
-*/
+
 
 Matrix Matrix::operator-(Matrix& m)
 {
@@ -307,14 +338,14 @@ Matrix Matrix::operator-(Matrix& m)
   return r;
 }
 
-/*
+
 Matrix Matrix::operator-(double d)
 {
   Matrix r = *this;
   r -= d;
   return r;
 }
-*/
+
 
 void Matrix::mul(Matrix& m)
 {
@@ -368,9 +399,62 @@ Matrix Matrix::operator++()
   return  *this;
 }
 
+Matrix Matrix::operator++(int)
+{
+  Matrix c = *this;
+  add(Matrix(num_rows, num_col, MI_VALUE, 1.0));
+  return  c;
+}
 
 
+Matrix Matrix::operator--()
+{
+  add(Matrix(num_rows, num_col, MI_VALUE, -1.0));
+  return *this;
+}
 
+Matrix Matrix::operator--(int)
+{
+  Matrix c = *this;
+  add(Matrix(num_rows, num_col, MI_VALUE, -1.0));
+  return  c;
+}
+
+Matrix Matrix::operator-()
+{
+  for(int iR=0;iR<num_rows;iR++)
+    for(int iC=0;iC<num_col;iC++)
+      values[iR][iC] = -values[iR][iC];
+  return *this;
+}
+
+Matrix Matrix::operator+()
+{
+  return *this;
+}
+
+
+void Matrix::setSubMatrix(int r, int c, Matrix& m)
+{
+  if ((r+m.num_rows)>num_rows||(c+m.num_col)>num_col)
+    throw("Invalid matrix dimensions for this operation");
+
+    for(int iR =0; iR < num_rows; iR++)
+      for(int iC=0; iC<num_col; iC++)
+        values[iR+r][iC+c] = m.values[iR][iC];
+}
+
+
+Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
+{
+  if((r+nr)>num_rows || (c+nc)>num_col)throw("Invalid matrix dimension");
+
+  Matrix m(nr, nc);
+  for(int iR=0;iR<m.num_rows;iR++)
+    for(int iC=0;iC<m.num_col;iC++)
+      m.values[iR][iC] = values[r+iR][c+iC];
+  return m;
+}
 
 
 int main()
