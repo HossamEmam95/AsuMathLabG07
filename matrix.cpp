@@ -1,10 +1,14 @@
 #include <iostream>
+#include <iostream>
 #include <string.h>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cstdarg>
 
 using namespace std;
+
+
 class Matrix{
 
   int num_rows, num_col;
@@ -19,6 +23,7 @@ public:
  enum MI{MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE};
 
 //rowan
+  Matrix(int num_rows, int num_col, int initialization= MI_ZEROS, double initializationValue = 0.0 );
   Matrix(int num_rows, int num_col, double first, ...);
   Matrix(Matrix& m);
   Matrix(double d);
@@ -28,7 +33,7 @@ public:
 //rawan
   void copy(Matrix& m);
   void copy(double d);
-  void copy(std::string s);
+  //void copy(string s);
   void reset();
 
   string getString();
@@ -98,9 +103,140 @@ public:
   double getDeteminant();
   double getTranspose();
   double getInverse();
-  
-};
 
+};
+//end of Matrix Class
+
+
+Matrix::Matrix()
+{
+  num_rows = num_col = 0;
+  values = NULL;
+}
+
+Matrix::~Matrix()
+{
+reset();
+}
+
+Matrix::Matrix(int num_rows, int num_col, int initialization, double initializationValue)
+{
+    this->num_rows = num_rows;
+    this->num_col = num_col;
+    if((num_col*num_rows) == 0){values = NULL; return;}
+
+    values = new double* [num_rows];
+    for(int iR = 0; iR<num_rows; iR++ )
+    {
+      values[iR] = new double[num_col];
+      for(int iC = 0; iC<num_col; iC++)
+      {
+        switch (initialization)
+        {
+          case MI_ZEROS: values[iR][iC];
+          case MI_ONES: values[iR][iC] = 1; break;
+          case MI_EYE: values[iR][iC] = (iR==iC)?1:0; break;
+          case MI_RAND: values[iR][iC] = (rand()%1000000)/1000000.0; break;
+          case MI_VALUE: values[iR][iC] = initializationValue; break;
+        }
+      }
+    }
+}
+
+
+Matrix::Matrix(int num_rows,int num_col, double first, ...)
+{
+  this-> num_rows = num_rows;
+  this-> num_col = num_col;
+  if ((num_col*num_rows) == 0 ){values = NULL; return;}
+
+  values = new double* [num_rows];
+  va_list va;
+  va_start(va, first);
+
+  for(int iR=0; iR<num_rows; iR++ )
+  {
+    values[iR] = new double[num_col];
+
+    for(int iC=0; iC<num_col; iC++)
+    {
+      values[iR][iC] = (iC==0 && iR==0)?first : va_arg(va, double);
+    }
+  }
+  va_end(va);
+}
+
+Matrix::Matrix(Matrix& m)
+{
+  num_rows = num_rows = 0;
+  values = NULL;
+  copy(m);
+}
+
+
+void Matrix::copy(Matrix& m)
+{
+  reset();
+
+  this-> num_rows = m.num_rows;
+  this-> num_col = m.num_col;
+  if ((num_col*num_rows) == 0 ){values = NULL; return;}
+
+  values = new double*[num_rows];
+  for(int iR=0;iR<num_rows;iR++)
+  {
+    values[iR] = new double[num_col];
+    for(int iC=0;iC<num_col;iC++)
+    {
+    values[iR][iC] = m.values[iR][iC];
+    }
+  }
+}
+
+Matrix::Matrix(double d)
+{
+  num_rows = num_rows = 0;
+  values = NULL;
+  copy(d);
+}
+
+
+void Matrix::copy(double d)
+{
+  reset();
+
+  this->num_rows = 1;
+  this->num_col = 1;
+  values = new double*[1];
+  values[0] = new double[1];
+  values[0][0] = d;
+}
+
+
+
+void Matrix::reset()
+{
+  if (values)
+  {
+    for(int i=0; i<num_rows; i++){delete[] values[i];}
+    delete[] values;
+  }
+  num_rows = num_col = 0;
+  values = NULL;
+}
+
+
+Matrix Matrix::operator=(Matrix& m)
+{
+  copy(m);
+  return *this;
+}
+
+Matrix Matrix::operator=(double d)
+{
+  copy(d);
+  return *this;
+}
 
 
 int main()
