@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
+#include<curses.h>
+#include <ncurses.h>
 
 using namespace std;
 
@@ -71,10 +73,10 @@ public:
   Matrix operator/(double d);
 
 //bahnsasay
-  Matrix operator ++();//Pre Increment
-  Matrix operator ++(int);//Post Increment ,int is not used
-  Matrix operator --();//Pre Increment
-  Matrix operator --(int);//Post Increment ,int is not used
+  Matrix operator++();//Pre Increment
+  Matrix operator++(int);//Post Increment ,int is not used
+  Matrix operator--();//Pre Increment
+  Matrix operator--(int);//Post Increment ,int is not used
 
   Matrix operator-();
   Matrix operator+();
@@ -237,6 +239,138 @@ Matrix Matrix::operator=(double d)
   copy(d);
   return *this;
 }
+
+void Matrix::add(Matrix& m)
+{
+  if(num_rows!=m.num_rows||num_col!=m.num_col)
+    throw("Invalid Matrix dimensions for add operation");
+
+  for(int iR=0; iR<num_rows; iR++ )
+    for(int iC=0; iC<num_col; iC++)
+      values[iR][iC] += m.values[iR][iC];
+}
+
+void Matrix::operator+=(Matrix& m)
+{
+  add(m);
+}
+
+/*
+void Matrix::operator+=(double d)
+{
+  add(Matrix(num_rows, num_col, MI_VALUE, d));
+}
+*/
+
+Matrix Matrix::operator+(Matrix& m)
+{
+  Matrix r = *this;
+  r += m;
+  return r;
+}
+
+/*
+Matrix Matrix::operator+(double d)
+{
+  Matrix r = *this;
+  r += d;
+  return r;
+}
+*/
+
+void Matrix::sub(Matrix& m)
+{
+  if(num_rows!=m.num_rows||num_col!=m.num_col)
+    throw("Invalid Matrix dimensions for sub operation");
+
+  for(int iR=0; iR<num_rows; iR++ )
+    for(int iC=0; iC<num_col; iC++)
+      values[iR][iC] -= m.values[iR][iC];
+}
+
+void Matrix::operator-=(Matrix& m)
+{
+  sub(m);
+}
+
+/*
+void Matrix::operator-=(double d)
+{
+  sub(Matrix(num_rows, num_col, MI_VALUE, d));
+}
+*/
+
+Matrix Matrix::operator-(Matrix& m)
+{
+  Matrix r = *this;
+  r -= m;
+  return r;
+}
+
+/*
+Matrix Matrix::operator-(double d)
+{
+  Matrix r = *this;
+  r -= d;
+  return r;
+}
+*/
+
+void Matrix::mul(Matrix& m)
+{
+    if(num_rows!=m.num_rows||num_col!=m.num_col)
+      throw("Invalid dimensions for mul operation");
+
+    Matrix r(num_rows, m.num_col);
+
+    for(int iR=0; iR<num_rows; iR++)
+      for(int iC=0; iC<num_col; iC++)
+      {
+        r.values[iR][iC] = 0;
+        for(int k=0; k<m.num_col; k++)
+          r.values[iR][iC] += values[iR][iC] * m.values[k][iC];
+      }
+      copy(r);
+}
+
+void Matrix::operator*=(Matrix& m)
+{
+  mul(m);
+}
+
+void Matrix::operator*=(double d)
+{
+    for(int iR=0;iR<num_rows;iR++)
+      for(int iC=0;iC<num_col;iC++)
+        values[iR][iC] *= 9;
+}
+
+
+Matrix Matrix::operator*(Matrix& m)
+{
+  Matrix r = *this;
+  r*=m;
+  return r;
+}
+
+
+Matrix Matrix::operator*(double d)
+{
+  Matrix r = *this;
+  r*=d;
+  return r;
+}
+
+Matrix Matrix::operator++()
+{
+  const double d = 1.0;
+  add(Matrix(num_rows, num_col, MI_VALUE, d));
+  return  *this;
+}
+
+
+
+
 
 
 int main()
