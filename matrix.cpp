@@ -23,7 +23,7 @@ public:
   ~Matrix();
 //Doaa
  enum MI{MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE};
-
+  Matrix(int num_rows,int num_col,double data[]);
 //rowan
   Matrix(int num_rows, int num_col, int initialization= MI_ZEROS, double initializationValue = 0.0 );
   Matrix(int num_rows, int num_col, double first, ...);
@@ -118,9 +118,26 @@ Matrix::Matrix()
 
 Matrix::~Matrix()
 {
-reset();
+    reset();
 }
+Matrix::Matrix(int num_rows,int num_col,double data[])
+{
+    this->num_rows =num_rows;
+    this->num_col =num_col;
+    if((num_col*num_rows) == 0){values = NULL; return;}
+    values=new double* [num_rows];
+    int data_count=0;
+    for (int iR=0;iR<num_rows;iR++)
+    {
+        values[iR] =new double[num_col];
+        for (int iC=0;iC<num_col;iC++)
+        {
+            values[iR][iC] = data[data_count];
+            data_count++;
+        }
+    }
 
+}
 Matrix::Matrix(int num_rows, int num_col, int initialization, double initializationValue)
 {
     this->num_rows = num_rows;
@@ -526,7 +543,7 @@ int main()
 {
   Matrix m(2, 2, 1,2,3,4);
   Matrix n(2, 2, 1,2,3,4);
-  m+n ; 
+  m+n ;
 
   return 0;
 }
