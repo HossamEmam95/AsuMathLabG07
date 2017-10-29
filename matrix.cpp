@@ -122,7 +122,7 @@ Matrix::~Matrix()
 {
     reset();
 }
-Matrix::Matrix(int num_rows,int num_col,double data[])
+Matrix::Matrix(int num_rows,int num_col,double *data)
 {
     this->num_rows =num_rows;
     this->num_col =num_col;
@@ -602,35 +602,37 @@ string remove(char* charToRemove, string &str) {
 	}
 	return str;
 }
-void MatrixOptimization(string s, double x[1024])
+void MatrixOptimization(string s, double *x)
 {
 	int pos1 = s.find("[");
 	int pos2 = s.find_last_of("]");
 	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
 	remove(";", s);
 	replace(s.begin(), s.end(), ' ', ',');
-	char num[10];
-	strcpy(num, s.c_str() + ',');
+	char *num=new char[10];
+	s=s+',';
+	static int i = 0;
+	static int count = -1;
 	for (int a = 0; a < s.length(); a++)
 	{
 		string o;
 		int index;
 		if (s[a] == ',')
 		{
-			static int count = -1;
 			o = s.substr(count + 1, a - count - 1);
 			count = a;
 			index = 1;
 		}
 		while ((a < s.length()) && (index == 1))
 		{
-			static int i = 0;
 			strcpy(num, o.c_str());
 			x[i] = atof(num);
 			index = 0;
 			i++;
 		}
 	}
+	i = 0;
+	count = -1;
 }
 char OpCode(string s)
 {
@@ -668,17 +670,17 @@ int main()
 {
   Write();
 	inputFile();
-	double x[1024];
   int num_row, num_col;
-	getDimension(FirstMatrix,num_row,num_col);
+  getDimension(FirstMatrix,num_row,num_col);
+  double *x=new double[num_row*num_col];
   MatrixOptimization(FirstMatrix,x);
-  Matrix A(num_row,num_col,x);
-  double y[1024];
+  Matrix b(num_row,num_col,x);
   int num_row_B, num_col_B;
   getDimension(SecondMatrix,num_row_B,num_col_B);
+  double *y=new double[num_col_B*num_row_B];
   MatrixOptimization(SecondMatrix,y);
-  Matrix B(num_row_B,num_col_B,y);
-	cout << x[2] << endl;
+  Matrix a(num_row_B,num_col_B,y);
+	cout << x[2] <<" "<<y[2]<< endl;
 	cout << "First Matrix: " << FirstMatrix << endl << "Second Matrix: " << SecondMatrix << endl << FirstOp << endl << SixthOp << endl;
   cout << num_row << endl << num_col << endl;
 	cout << OpCode(FirstOp) << endl;
