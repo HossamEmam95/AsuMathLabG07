@@ -7,7 +7,9 @@
 #include <cstdarg>
 #include<curses.h>
 #include <ncurses.h>
-
+#include <fstream>
+#include <cstring>
+#include <algorithm>
 using namespace std;
 
 
@@ -538,12 +540,152 @@ ostream& operator << (ostream &os, Matrix& m)
 }
 
 */
-
+void Write()
+{
+	string a = "A = [7.3 4.8; 3.8 7.2; 3.4 7.5];";
+	string b = "B = [1.2 5.7 4.2 1.4; 6.3 2.5 8.1 3.1; 6.4 2.8 7.1 8.1; 3.2 5.1 7.2 6.2];";
+	string c = "C = A + B";
+	string d = "D = A - B";
+	string e = "E = A * B";
+	string f = "F = A / B";
+	string g = "G = 1 ./ A";
+	string h = "H = C'";
+	ofstream myfile;
+	myfile.open("E:\Learning\College\Software Engineering\TryAgain.txt");
+	if (!myfile.bad())
+	{
+		myfile << a << "\n" << b << "\n\n" << c << endl << d << endl << e << endl << f << endl << g << endl << h << endl;
+		myfile.close();
+	}
+	else
+		cout << "File write failed." << endl;
+}
+string FirstMatrix, SecondMatrix, FirstOp, SecOp, ThirdOp, FourthOp, FifthOp, SixthOp;
+string Rubbish;
+void inputFile()
+{
+	ifstream infile;
+	infile.open("E:\Learning\College\Software Engineering\TryAgain.txt");
+	getline(infile, FirstMatrix);
+	getline(infile, SecondMatrix);
+	getline(infile, Rubbish);
+	getline(infile, FirstOp);
+	getline(infile, SecOp);
+	getline(infile, ThirdOp);
+	getline(infile, FourthOp);
+	getline(infile, FifthOp);
+	getline(infile, SixthOp);
+	infile.close();
+}
+void getDimension(string s,int &nR,int &nC)
+{
+	nR = 0;
+	int nSpaces = 0;
+	nC = 1;
+	for (int i = 0; i < s.length(); i++)
+	{
+		if (s[i] == ';')
+		{
+			nR++;
+		}
+		if (s[i] == ' ')
+		{
+			nSpaces++;
+		}
+	}
+	nC = nSpaces / nR;
+}
+string remove(char* charToRemove, string &str) {
+	for (unsigned int i = 0; i < strlen(charToRemove); ++i)
+	{
+		str.erase(remove(str.begin(), str.end(), charToRemove[i]), str.end());
+	}
+	return str;
+}
+void MatrixOptimization(string s, double x[1024])
+{
+	int pos1 = s.find("[");
+	int pos2 = s.find_last_of("]");
+	s = s.substr(pos1 + 1, pos2 - pos1 - 1);
+	remove(";", s);
+	replace(s.begin(), s.end(), ' ', ',');
+	char num[10];
+	strcpy(num, s.c_str() + ',');
+	for (int a = 0; a < s.length(); a++)
+	{
+		string o;
+		int index;
+		if (s[a] == ',')
+		{
+			static int count = -1;
+			o = s.substr(count + 1, a - count - 1);
+			count = a;
+			index = 1;
+		}
+		while ((a < s.length()) && (index == 1))
+		{
+			static int i = 0;
+			strcpy(num, o.c_str());
+			x[i] = atof(num);
+			index = 0;
+			i++;
+		}
+	}
+}
+char OpCode(string s)
+{
+	char op = 'a';
+	for (int i = 0; i < s.length(); i++)
+	{
+		if ((int)s[i] == 43)
+		{
+			op = '+';
+		}
+		if ((int)s[i] == 45)
+		{
+			op = '-';
+		}
+		if ((int)s[i] == 42)
+		{
+			op = '*';
+		}
+		if (((int)s[i] == 46)&& ((int)s[i+1] == 47))
+		{
+			op = '.';
+		}
+		if (((int)s[i] == 47)&& ((int)s[i-1] != 46))
+		{
+			op = '/';
+		}
+		if ((int)s[i] == 39)
+		{
+			op = '1';
+		}
+	}
+	return op;
+}
 int main()
 {
-  Matrix m(2, 2, 1,2,3,4);
-  Matrix n(2, 2, 1,2,3,4);
-  m+n ;
-
-  return 0;
+  Write();
+	inputFile();
+	double x[1024];
+  int num_row, num_col;
+	getDimension(FirstMatrix,num_row,num_col);
+  MatrixOptimization(FirstMatrix,x);
+  Matrix A(num_row,num_col,x);
+  double y[1024];
+  int num_row_B, num_col_B;
+  getDimension(SecondMatrix,num_row_B,num_col_B);
+  MatrixOptimization(SecondMatrix,y);
+  Matrix B(num_row_B,num_col_B,y);
+	cout << x[2] << endl;
+	cout << "First Matrix: " << FirstMatrix << endl << "Second Matrix: " << SecondMatrix << endl << FirstOp << endl << SixthOp << endl;
+  cout << num_row << endl << num_col << endl;
+	cout << OpCode(FirstOp) << endl;
+	cout << OpCode(SecOp) << endl;
+	cout << OpCode(ThirdOp) << endl;
+	cout << OpCode(FourthOp) << endl;
+	cout << OpCode(FifthOp) << endl;
+	cout << OpCode(SixthOp) << endl;
+	return 0;
 }
