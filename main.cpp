@@ -511,18 +511,18 @@ double Matrix::getDeterminant()
 }
 string Matrix::getString()
 {
-  string s;
-  for(int iR=0;iR<num_rows;iR++)
-    {
-      for(int iC=0;iC<num_col;iC++)
-      {
-        char buffer[50];
-        sprintf(buffer, "%g\t", values[iR][iC]);
-        s += buffer;
-      }
-      s+="\n";
-    }
-    return s;
+string s;
+for(int iR=0;iR<num_rows;iR++)
+{
+for(int iC=0;iC<num_col;iC++)
+{
+char buffer[50];
+sprintf(buffer, "%g\t", values[iR][iC]);
+s += buffer;
+}
+s+="\n";
+}
+return s;
 }
 
 // istream& operator >> (istream &is, Matrix& m)
@@ -558,17 +558,17 @@ Matrix Matrix::getTranspose()
 
 // Matrix Matrix::getInverse()
 // {
-//   Matrix cof(num_rows, num_col, 0);
-//   Matrix inv(num_rows, num_col,  0);
+//   Matrix cof(num_rows, num_col);
+//   Matrix inv(num_rows, num_col);
+//   if(num_rows!=num_col) return inv;
 //
 //   double det = getDeterminant();
+//
 //   for(int iR=0;iR<num_rows;iR++)
 //  {
 //    for(int iC=0;iC<num_col;iC++)
-//
 //    {
-//      cout<<getCofactor(iR,iC)<<endl;
-//    inv.values[iC][iR] = getCofactor(iR,iC)/det;
+//      inv.values[iC][iR] = getCofactor(iR,iC) / det;
 //    }
 //  }
 //  return inv;
@@ -578,8 +578,8 @@ int main()
 {
   Matrix m(3, 2, 2.0,2.0,2.0,3.0,4.0,5.0);
   Matrix n(2, 2, 1.0,2.0,3.0,4.0);
-  Matrix c(3, 2, MI_ZEROS, 0.0);
-  Matrix b = t * n ;
+  Matrix t(2, 2, 1.0,2.0,3.0,4.0);
+  Matrix c = t * n ;
   // Matrix x = m.getCofactor(0,0);
   // Matrix y = n.getInverse();
 
