@@ -574,22 +574,37 @@ Matrix Matrix::getTranspose()
 //  return inv;
 // }
 
-int main()
+void print(Matrix m )
 {
-  Matrix m(3, 2, 2.0,2.0,2.0,3.0,4.0,5.0);
-  Matrix n(2, 2, 1.0,2.0,3.0,4.0);
-  Matrix t(2, 2, 1.0,2.0,3.0,4.0);
-  Matrix c = t * n ;
-  // Matrix x = m.getCofactor(0,0);
-  // Matrix y = n.getInverse();
-
-  for(int i=0; i<c.num_rows; i++)
+  for(int i=0; i<m.num_rows; i++)
   {
-    for(int j=0; j<c.num_col; j++)
+    for(int j=0; j<m.num_col; j++)
     {
-      cout<<c.values[i][j]<<" ";
+      cout<<m.values[i][j]<<" ";
     }
     cout<<endl;
+  }
 }
+
+int main()
+{
+  Matrix c(3, 3, -1.443, 0.3246, 1.82425, -1.663, -0.557, 3.9724, 0.409, 0.0868, 0.6839);
+  Matrix n(3,3, 7.3, 4.8, 3.8, 7.2, 3.4, 7.5, 5.1, 4.3, 3.5);
+  Matrix m(3, 3, 1.2, 2.1, 3.4, 4.1, 7.2, 3.4, 7.1, 5.2, 4.6);
+  cout<<">>>"<<"Matrix A ="<<endl;;
+  print(n);
+  cout<<">>> "<<"Matrix B ="<<endl;;
+  print(m);
+  cout<<">>> "<<"A + B = "<<endl;
+  print(m+n);
+  cout<<">>> "<<"A - B = "<<endl;
+  print(n-m);
+  cout<<">>> "<<"A * B = "<<endl;
+  print(m*n);
+  cout<<">>> "<<"B / A = "<<endl;
+  print(c);
+  cout<<">>> "<<"A' = "<<endl;
+  Matrix k = n.getTranspose();
+  print(k);
   return 0;
 }

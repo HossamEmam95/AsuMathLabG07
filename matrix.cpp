@@ -1,117 +1,3 @@
-#include <iostream>
-#include <string.h>
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
-#include <cstdarg>
-#include<curses.h>
-#include <ncurses.h>
-
-using namespace std;
-
-
-class Matrix{
-
-public:
-  int num_rows, num_col;
-
-
-
-  double** values;
-
-
-  //hussien
-  Matrix();
-  ~Matrix();
-//Doaa
- enum MI{MI_ZEROS, MI_ONES, MI_EYE, MI_RAND, MI_VALUE};
-
-//rowan
-  Matrix(int num_rows, int num_col, int initialization= MI_ZEROS, double initializationValue = 0.0 );
-  Matrix(int num_rows, int num_col, double first, ...);
-  Matrix(const Matrix& m);
-  Matrix(double d);
-  Matrix(std::string s);
-
-
-//rawan
-  void copy(const Matrix& m);
-  void copy(double d);
-  void copy(string s);
-  void reset();
-
-  string getString();
-
-  Matrix operator=(const Matrix& m);
-  Matrix operator=(double d);
-  Matrix operator=(string s);
-
-//hossam
-  void add(const Matrix& m);
-  void operator+=(Matrix& m);
-  void operator+=(double d);
-  Matrix operator+(Matrix& m);
-  Matrix operator+(double d);
-
-
-  void sub(const Matrix& m);
-  void operator-=(Matrix& m);
-  void operator-=(double d);
-  Matrix operator-(Matrix& m);
-  Matrix operator-(double d);
-
-//hussien
-  void mul(Matrix& m);
-  void operator*=(Matrix& m);
-  void operator*=(double d);
-  Matrix operator*(Matrix& m);
-  Matrix operator*(double d);
-
-//Doaa & zeinab
-  void div(Matrix& m);
-  void operator/=(Matrix& m);
-  void operator/=(double d);
-  Matrix operator/(Matrix& m);
-  Matrix operator/(double d);
-
-//bahnsasay
-  Matrix operator++();//Pre Increment
-  Matrix operator++(int);//Post Increment ,int is not used
-  Matrix operator--();//Pre Increment
-  Matrix operator--(int);//Post Increment ,int is not used
-
-  Matrix operator-();
-  Matrix operator+();
-
-
-friend istream& operator >> (istream &is, Matrix& C); //Stream
-friend ostream& operator << (ostream &os, Matrix& C); //Stream
-
-//mostafa
-  void setSubMatrix(int iR,int iC, Matrix& m);
-  Matrix getSubMatrix(int r, int c, int nr, int nc);
-  Matrix getCofactor(int r, int c);
-
-  void addColumn(Matrix& m);
-  void addRow(Matrix& m);
-
-//samir
-  double& operator[](int i){return values[i/num_col][i%num_col];}
-  double& operator()(int i){return values[i/num_col][i%num_col];}
-  double& operator()(int r, int c){return values[r][c];}
-
-  int getn(){return num_rows*num_col;};
-  int getnR(){return num_rows;};
-  int getnC(){return num_col;};
-//doaa & zienab
-  double getDeterminant();
-  Matrix getTranspose();
-  Matrix getInverse();
-
-};
-//end of Matrix Class
-
-
 Matrix::Matrix()
 {
   num_rows = num_col = 0;
@@ -511,18 +397,18 @@ double Matrix::getDeterminant()
 }
 string Matrix::getString()
 {
-  string s;
-  for(int iR=0;iR<num_rows;iR++)
-    {
-      for(int iC=0;iC<num_col;iC++)
-      {
-        char buffer[50];
-        sprintf(buffer, "%g\t", values[iR][iC]);
-        s += buffer;
-      }
-      s+="\n";
-    }
-    return s;
+string s;
+for(int iR=0;iR<num_rows;iR++)
+{
+for(int iC=0;iC<num_col;iC++)
+{
+char buffer[50];
+sprintf(buffer, "%g\t", values[iR][iC]);
+s += buffer;
+}
+s+="\n";
+}
+return s;
 }
 
 // istream& operator >> (istream &is, Matrix& m)
@@ -558,38 +444,30 @@ Matrix Matrix::getTranspose()
 
 // Matrix Matrix::getInverse()
 // {
-//   Matrix cof(num_rows, num_col, 0);
-//   Matrix inv(num_rows, num_col,  0);
+//   Matrix cof(num_rows, num_col);
+//   Matrix inv(num_rows, num_col);
+//   if(num_rows!=num_col) return inv;
 //
 //   double det = getDeterminant();
+//
 //   for(int iR=0;iR<num_rows;iR++)
 //  {
 //    for(int iC=0;iC<num_col;iC++)
-//
 //    {
-//      cout<<getCofactor(iR,iC)<<endl;
-//    inv.values[iC][iR] = getCofactor(iR,iC)/det;
+//      inv.values[iC][iR] = getCofactor(iR,iC) / det;
 //    }
 //  }
 //  return inv;
 // }
 
-int main()
+void print(Matrix m )
 {
-  Matrix m(3, 2, 2.0,2.0,2.0,3.0,4.0,5.0);
-  Matrix n(2, 2, 1.0,2.0,3.0,4.0);
-  Matrix c(3, 2, MI_ZEROS, 0.0);
-  Matrix b = t * n ;
-  // Matrix x = m.getCofactor(0,0);
-  // Matrix y = n.getInverse();
-
-  for(int i=0; i<c.num_rows; i++)
+  for(int i=0; i<m.num_rows; i++)
   {
-    for(int j=0; j<c.num_col; j++)
+    for(int j=0; j<m.num_col; j++)
     {
-      cout<<c.values[i][j]<<" ";
+      cout<<m.values[i][j]<<" ";
     }
     cout<<endl;
-}
-  return 0;
+  }
 }
