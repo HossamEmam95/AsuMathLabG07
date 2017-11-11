@@ -1,3 +1,6 @@
+#include <header.h>
+
+
 Matrix::Matrix()
 {
   num_rows = num_col = 0;
@@ -440,34 +443,4 @@ Matrix Matrix::getTranspose()
    }
  }
  return temp;
-}
-
-// Matrix Matrix::getInverse()
-// {
-//   Matrix cof(num_rows, num_col);
-//   Matrix inv(num_rows, num_col);
-//   if(num_rows!=num_col) return inv;
-//
-//   double det = getDeterminant();
-//
-//   for(int iR=0;iR<num_rows;iR++)
-//  {
-//    for(int iC=0;iC<num_col;iC++)
-//    {
-//      inv.values[iC][iR] = getCofactor(iR,iC) / det;
-//    }
-//  }
-//  return inv;
-// }
-
-void print(Matrix m )
-{
-  for(int i=0; i<m.num_rows; i++)
-  {
-    for(int j=0; j<m.num_col; j++)
-    {
-      cout<<m.values[i][j]<<" ";
-    }
-    cout<<endl;
-  }
 }
