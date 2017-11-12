@@ -1,5 +1,4 @@
-#include <header.h>
-
+#include "header.h"
 
 Matrix::Matrix()
 {
@@ -369,6 +368,9 @@ void Matrix::addRow(Matrix& m)
 }
 
 
+
+
+
 Matrix Matrix::getCofactor(int r, int c)
 {
   if(num_rows<=1 || num_col<=1)throw("Invalid matrix dimensions");
@@ -384,6 +386,63 @@ Matrix Matrix::getCofactor(int r, int c)
     }
     return m;
 }
+
+
+
+
+Matrix Matrix::getMinormatrix()
+{
+Matrix c(num_rows,num_col,0);
+Matrix m;
+double d;
+for(int i=0;i<num_rows;i++)
+for(int j=0;j<num_col;j++)
+{
+
+m=this->getCofactor(i,j);
+d=m.getDeterminant();
+c.values[i][j]=d;
+
+
+
+
+}
+
+return c;
+
+
+}
+
+
+Matrix Matrix::cofactor()
+{
+ Matrix c(num_rows,num_col,0);
+ c=this->getMinormatrix();
+
+
+
+ for(int i=0;i<num_rows;i++)
+  for(int j=0;j<num_col;j++)
+   {
+    if((i+j)%2==1)
+    c.values[i][j]=-c.values[i][j];
+    else
+    c.values[i][j]=c.values[i][j];
+
+
+
+
+   }
+   return c;
+
+
+
+
+
+}
+
+
+
 
 
 double Matrix::getDeterminant()
@@ -443,4 +502,93 @@ Matrix Matrix::getTranspose()
    }
  }
  return temp;
+}
+
+Matrix Matrix::multiply_by_no( double d)
+{
+  Matrix m;
+  m=*this;
+   for(int i=0;i<num_rows;i++)
+
+     for(int j=0;j<num_col ;j++)
+     {
+        m.values[i][j]=(m.values[i][j])*d;
+     }
+   return m;
+
+
+}
+
+
+
+
+Matrix Matrix::inverse()
+{
+  Matrix c;
+  Matrix s;
+  Matrix inversed_mat;
+  c=*this;
+
+  double d,one_over_det;
+  d=(*this).getDeterminant();
+
+  one_over_det=1/d;
+
+  c=this->cofactor();
+
+  s=c.getTranspose();
+
+  inversed_mat=s.multiply_by_no(one_over_det);
+
+  return inversed_mat;
+
+
+
+
+
+
+}
+
+Matrix Matrix::division(Matrix a, Matrix b)
+{
+Matrix output;
+Matrix c;
+c=b.inverse();
+output=a*c;
+return output;
+}
+
+
+Matrix Matrix::operator/(Matrix b)
+{
+   Matrix c;
+   c=this->division(*this,b);
+   return c;
+
+
+}
+
+Matrix Matrix::operator/(double d)
+{
+Matrix c;
+double number=1/d;
+c=this->multiply_by_no(number);
+return c;
+
+}
+
+void Matrix::operator/=( Matrix b)
+{
+*this=this->division(*this,b);
+
+
+}
+
+void Matrix::operator/=(double b)
+{
+  double number =1/b;
+
+*this=this->multiply_by_no(number);
+
+
 }
