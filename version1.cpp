@@ -68,11 +68,16 @@ public:
   Matrix operator*(double d);
 
 //Doaa & zeinab
-  void div(Matrix& m);
-  void operator/=(Matrix& m);
-  void operator/=(double d);
-  Matrix operator/(Matrix& m);
+ Matrix division(Matrix a, Matrix b);
+
+  Matrix multiply_by_no( double d);
+  Matrix getMinormatrix();
+  Matrix cofactor();
+  Matrix operator/(Matrix b);
+  Matrix inverse();
   Matrix operator/(double d);
+  void operator/=( Matrix b);
+  void operator/=(double b);
 
 //bahnsasay
   Matrix operator++();//Pre Increment
@@ -90,7 +95,7 @@ friend ostream& operator << (ostream &os, Matrix& C); //Stream
 //mostafa
   void setSubMatrix(int iR,int iC, Matrix& m);
   Matrix getSubMatrix(int r, int c, int nr, int nc);
-  Matrix getCofactor(int r, int c);
+  Matrix getCofactor(int r,int c);
 
   void addColumn(Matrix& m);
   void addRow(Matrix& m);
@@ -480,6 +485,9 @@ void Matrix::addRow(Matrix& m)
 }
 
 
+
+
+
 Matrix Matrix::getCofactor(int r, int c)
 {
   if(num_rows<=1 || num_col<=1)throw("Invalid matrix dimensions");
@@ -495,6 +503,73 @@ Matrix Matrix::getCofactor(int r, int c)
     }
     return m;
 }
+
+
+
+
+Matrix Matrix::getMinormatrix()
+{
+Matrix c(num_rows,num_col,0);
+Matrix m;
+double d;
+for(int i=0;i<num_rows;i++)
+for(int j=0;j<num_col;j++)
+{
+
+m=this->getCofactor(i,j);
+d=m.getDeterminant();
+c.values[i][j]=d;
+
+
+
+
+}
+
+return c;
+
+
+}
+void print(Matrix m )
+{
+  for(int i=0; i<m.num_rows; i++)
+  {
+    for(int j=0; j<m.num_col; j++)
+    {
+      cout<<m.values[i][j]<<" ";
+    }
+    cout<<endl;
+  }
+}
+
+Matrix Matrix::cofactor()
+{
+ Matrix c(num_rows,num_col,0);
+ c=this->getMinormatrix();
+
+
+
+ for(int i=0;i<num_rows;i++)
+  for(int j=0;j<num_col;j++)
+   {
+    if((i+j)%2==1)
+    c.values[i][j]=-c.values[i][j];
+    else
+    c.values[i][j]=c.values[i][j];
+
+
+
+
+   }
+   return c;
+
+
+
+
+
+}
+
+
+
 
 
 double Matrix::getDeterminant()
@@ -556,43 +631,107 @@ Matrix Matrix::getTranspose()
  return temp;
 }
 
-// Matrix Matrix::getInverse()
-// {
-//   Matrix cof(num_rows, num_col);
-//   Matrix inv(num_rows, num_col);
-//   if(num_rows!=num_col) return inv;
-//
-//   double det = getDeterminant();
-//
-//   for(int iR=0;iR<num_rows;iR++)
-//  {
-//    for(int iC=0;iC<num_col;iC++)
-//    {
-//      inv.values[iC][iR] = getCofactor(iR,iC) / det;
-//    }
-//  }
-//  return inv;
-// }
-
-void print(Matrix m )
+Matrix Matrix::multiply_by_no( double d)
 {
-  for(int i=0; i<m.num_rows; i++)
-  {
-    for(int j=0; j<m.num_col; j++)
-    {
-      cout<<m.values[i][j]<<" ";
-    }
-    cout<<endl;
-  }
+  Matrix m;
+  m=*this;
+   for(int i=0;i<num_rows;i++)
+
+     for(int j=0;j<num_col ;j++)
+     {
+        m.values[i][j]=(m.values[i][j])*d;
+     }
+   return m;
+
+
 }
+
+
+
+
+Matrix Matrix::inverse()
+{
+  Matrix c;
+  Matrix s;
+  Matrix inversed_mat;
+  c=*this;
+
+  double d,one_over_det;
+  d=(*this).getDeterminant();
+
+  one_over_det=1/d;
+
+  c=this->cofactor();
+
+  s=c.getTranspose();
+
+  inversed_mat=s.multiply_by_no(one_over_det);
+
+  return inversed_mat;
+
+
+
+
+
+
+}
+
+Matrix Matrix::division(Matrix a, Matrix b)
+{
+Matrix output;
+Matrix c;
+c=b.inverse();
+output=a*c;
+return output;
+}
+
+
+Matrix Matrix::operator/(Matrix b)
+{
+   Matrix c;
+   c=this->division(*this,b);
+   return c;
+
+
+}
+
+Matrix Matrix::operator/(double d)
+{
+Matrix c;
+double number=1/d;
+c=this->multiply_by_no(number);
+return c;
+
+}
+
+void Matrix::operator/=( Matrix b)
+{
+*this=this->division(*this,b);
+
+
+}
+
+void Matrix::operator/=(double b)
+{
+  double number =1/b;
+
+*this=this->multiply_by_no(number);
+
+
+}
+
+
+
 
 int main()
 {
   Matrix c(3, 3, -1.443, 0.3246, 1.82425, -1.663, -0.557, 3.9724, 0.409, 0.0868, 0.6839);
-  Matrix n(3,3, 7.3, 4.8, 3.8, 7.2, 3.4, 7.5, 5.1, 4.3, 3.5);
+  Matrix n(3,3,3.0,0.0,2.0,2.0,0.0,-2.0,0.0,1.0,1.0);
   Matrix m(3, 3, 1.2, 2.1, 3.4, 4.1, 7.2, 3.4, 7.1, 5.2, 4.6);
+  Matrix a(2,2,1.0,2.0,2.0,2.0);
+  Matrix b(2,2,3.0,2.0,1.0,1.0);
   cout<<">>>"<<"Matrix A ="<<endl;;
-  print(n);
+  /*print(n);
   cout<<">>> "<<"Matrix B ="<<endl;;
   print(m);
   cout<<">>> "<<"A + B = "<<endl;
@@ -604,7 +743,19 @@ int main()
   cout<<">>> "<<"B / A = "<<endl;
   print(c);
   cout<<">>> "<<"A' = "<<endl;
-  Matrix k = n.getTranspose();
-  print(k);
+  Matrix k = n.getTranspose();*
+  Matrix d=n.inverse();
+  print(d);
+
+
+  print(k);*/
+
+Matrix l;
+l=a/b;
+print(l);
+
+  
+
+
   return 0;
 }
