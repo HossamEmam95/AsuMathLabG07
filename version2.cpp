@@ -1080,7 +1080,6 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 		for (int i = 0; i < nLines; i++)
 
 		{
-      cout<<"+"<<inputFileLines[i]<<"+"<<endl;
 
 			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
 
@@ -1129,7 +1128,6 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
   				char in1, in2, out, operation;
 
 				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-        cout<<operation<<endl;
 				switch (operation)
 
 				{
