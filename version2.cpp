@@ -1289,8 +1289,7 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 
 				{
 
-				case '+':
-
+				case '+':{
 					////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
             string zero = "[]";
             Matrix first(zero);
@@ -1304,40 +1303,34 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
               if (matrices[i].name == in2) second = matrices[i];
               if (matrices[i].name == out) matrices[i] = first + second;
             }
-					break;
+					break;}
 
-				case '-':
-
+				case '-':{
 					/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
 
-					break;
+					break;}
 
-				case '*':
-
+				case '*':{
 					/////////////////////////////put mulitplication function from matrix
 
-					break;
+					break;}
 
-				case '/':
-
+				case '/':{
 					////////////////////////////put division function
 
-					break;
+					break;}
 
-				case '1':
-
+				case '1':{
 					///////////////////////////put """""""inverse""""""" function of out = in1'
 
-					break;
+					break;}
 
-				case'.':
-
+				case'.': {
 					int num = (int)in1 - 48;
 
 					/////////////////////////put division function tht divide num/matrix in2  = matrix out
 
-					break;
-
+					break;}
 				}
 
 			}
