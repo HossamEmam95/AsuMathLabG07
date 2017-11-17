@@ -1105,6 +1105,8 @@ int main(int argc, char*argv[])
 // //   Matrix w (s);
 // //   print(w);
 
+Matrix matrices[100];
+int ptr = 0;
 string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
 
 	int nLines; //number Of lines
@@ -1247,7 +1249,6 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 
 				stringParsing(line, m, name); //function returns array of double values, name of the matrix
 
-        Matrix matrices[100];
 
 				for (int j = 0; j < multiVariable; j++)
 
@@ -1257,6 +1258,7 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
           Matrix w(m);
           matrices[j] = w;
           matrices[j].name = name[j];
+          ptr++;
 
 				}
 
@@ -1289,7 +1291,17 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 				case '+':
 
 					////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
-
+            Matrixe first;
+            Matrixe second;
+            Matrixe output;
+            output.name = out;
+            Matrices[ptr] = output;
+            for (int i = 0; i < 10; i++)
+            {
+              if (matrices[i].name == in1) first = matrices[i];
+              if (matrices[i].name == in2) second = matrices[i];
+              if (matrices[i].name == out) matrices[i] = first + second;
+            }
 					break;
 
 				case '-':
