@@ -487,6 +487,28 @@ return s;
 //   return os;
 // }
 
+friend istream &operator>>( istream &input, Matrix &D )
+
+{ for (int i = 0; i<D.num_rows; i++)
+ { for (int j = 0; j<D.num_col; j++)
+ { input >> D.values[i][j] ;
+ }
+ }
+ return input;
+ }
+
+friend ostream &operator<< (ostream &output, const Matrix &D) {
+	for (int i = 0; i<D.num_rows; i++)
+	{
+		for (int j = 0; j<D.num_col; j++)
+		{
+			output << D.values[i][j] << " ";
+		}
+		output << endl;
+	}
+	return output;
+}
+
 Matrix Matrix::getTranspose()
 
 {

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
+#include <fstream>
 //#include<curses.h>
 //#include <ncurses.h>
 #include <algorithm>
@@ -90,8 +91,8 @@ public:
   Matrix operator+();
 
 
-friend istream& operator >> (istream &is, Matrix& C); //Stream
-friend ostream& operator << (ostream &os, Matrix& C); //Stream
+friend istream &operator>>( istream &input, Matrix &D ) ; //Stream
+friend ostream &operator<< (ostream &output, const Matrix &D); //Stream
 
 //mostafa
   void setSubMatrix(int iR,int iC, Matrix& m);
