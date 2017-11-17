@@ -1304,28 +1304,70 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
               if (matrices[i].name == in2) second = matrices[i];
               if (matrices[i].name == out){output = first + second;}
             }
-              cout<<out<<" = ";
+              cout<<out<<" = "<<endl;
               print(output);
-
 
 					break;}
 
 				case '-':{
 
 					/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+          string zero = "[]";
+          Matrix first(zero);
+          Matrix second(zero);
+          Matrix output(zero);
+          output.name = out;
+          matrices[ptr] = output;
+          ptr++;
+          for (int i = 0; i < ptr; i++)
+          {
+            if (matrices[i].name == in1) {first = matrices[i];}
+            if (matrices[i].name == in2) second = matrices[i];
+            if (matrices[i].name == out){output = first - second;}
+          }
+            cout<<out<<" = "<<endl;
+            print(output);
 
 					break;}
 
 				case '*':{
 
 					/////////////////////////////put mulitplication function from matrix
-
+          string zero = "[]";
+          Matrix first(zero);
+          Matrix second(zero);
+          Matrix output(zero);
+          output.name = out;
+          matrices[ptr] = output;
+          ptr++;
+          for (int i = 0; i < ptr; i++)
+          {
+            if (matrices[i].name == in1) {first = matrices[i];}
+            if (matrices[i].name == in2) second = matrices[i];
+            if (matrices[i].name == out){output = first * second;}
+          }
+            cout<<out<<" = "<<endl;
+            print(output);
 					break;}
 
 				case '/':{
 
 					////////////////////////////put division function
-
+          string zero = "[]";
+          Matrix first(zero);
+          Matrix second(zero);
+          Matrix output(zero);
+          output.name = out;
+          matrices[ptr] = output;
+          ptr++;
+          for (int i = 0; i < ptr; i++)
+          {
+            if (matrices[i].name == in1) {first = matrices[i];}
+            if (matrices[i].name == in2) second = matrices[i];
+            if (matrices[i].name == out){output = first / second;}
+          }
+            cout<<out<<" = "<<endl;
+            print(output);
 					break;}
 
 				case '1':{
