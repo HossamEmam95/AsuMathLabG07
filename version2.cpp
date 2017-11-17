@@ -1257,8 +1257,8 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 
 					///Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
           Matrix w(m);
-          matrices[j] = w;
-          matrices[j].name = name[j];
+          matrices[ptr] = w;
+          matrices[ptr].name = name[j];
           ptr++;
 
 				}
@@ -1284,7 +1284,7 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 				char in1, in2, out, operation;
 
 				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-
+        cout<<"out = "<<out<<endl;
 				switch (operation)
 
 				{
@@ -1297,40 +1297,51 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
             Matrix output(zero);
             output.name = out;
             matrices[ptr] = output;
-            for (int i = 0; i < 10; i++)
+            cout<<ptr<<endl;
+            cout<<matrices[0].name<<endl;
+            cout<<matrices[1].name<<endl;
+
+            for (int i = 0; i <= ptr; i++)
             {
-              if (matrices[i].name == in1) first = matrices[i];
+              if (matrices[i].name == in1) {first = matrices[i];}
               if (matrices[i].name == in2) second = matrices[i];
-              if (matrices[i].name == out) matrices[i] = first + second;
+              if (matrices[i].name == out){ output = first + second; print(output);};
+
             }
 					break;}
 
 				case '-':{
+
 					/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
 
 					break;}
 
 				case '*':{
+
 					/////////////////////////////put mulitplication function from matrix
 
 					break;}
 
 				case '/':{
+
 					////////////////////////////put division function
 
 					break;}
 
 				case '1':{
+
 					///////////////////////////put """""""inverse""""""" function of out = in1'
 
 					break;}
 
-				case'.': {
+				case'.':{
+
 					int num = (int)in1 - 48;
 
 					/////////////////////////put division function tht divide num/matrix in2  = matrix out
 
 					break;}
+
 				}
 
 			}
