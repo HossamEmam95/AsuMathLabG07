@@ -1015,7 +1015,7 @@ void operationParsing(string s, char& in1, char& in2, char& out, char& operation
 		{
 
 			in1 = (char)s[i];
-
+      nLoop =  2 ;
 			noOpcode = 1;
 
 			operation = '.';
@@ -1373,14 +1373,47 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 				case '1':{
 
 					///////////////////////////put """""""inverse""""""" function of out = in1'
+          string zero = "[]";
+          Matrix first(zero);
 
+          Matrix output(zero);
+          output.name = out;
+          matrices[ptr] = output;
+          ptr++;
+          for (int i = 0; i < ptr; i++)
+          {
+            if (matrices[i].name == in1) {first = matrices[i];}
+
+            if (matrices[i].name == out){output = first.getTranspose();}
+          }
+            cout<<out<<" = "<<endl;
+            print(output);
 					break;}
 
 				case'.':{
-
 					int num = (int)in1 - 48;
 
 					/////////////////////////put division function tht divide num/matrix in2  = matrix out
+          string zero = "[]";
+          Matrix first(zero);
+          Matrix output(zero);
+          output.name = out;
+          matrices[ptr] = output;
+          ptr++;
+          for (int i = 0; i < ptr; i++)
+          {
+            if (matrices[i].name == in2) {first = matrices[i];}
+          }
+          output = first;
+            for(int r = 0; r<first.num_rows; r++ )
+            {
+                for(int c = 0; c<first.num_col; c++)
+                {
+                  output.values[r][c] = num/first.values[r][c];
+                }
+            }
+            cout<<out<<" = "<<endl;
+            print(output);
 
 					break;}
 
