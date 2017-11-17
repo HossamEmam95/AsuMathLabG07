@@ -326,6 +326,13 @@ Matrix Matrix::operator+()
   return *this;
 }
 
+void Matrix::setSubMatrix(int r, int c, Matrix &m) {/////////////////////////////////////////
+  if ((r + m.num_rows) > num_rows || (c + m.num_col) > num_col)
+    throw("Invalid matrix dimension");
+  for (int iR = 0; iR < m.num_rows; iR++)
+    for (int iC = 0; iC < m.num_col; iC++)
+      values[r + iR][c + iC] = m.values[iR][iC];
+}
 
 Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
 {
@@ -337,19 +344,6 @@ Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
       m.values[iR][iC] = values[r+iR][c+iC];
   return m;
 }
-
-
-Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
-{
-  if((r+nr)>num_rows || (c+nc)>num_col  )throw("Invalid matrix dimension");
-
-  Matrix m(nr, nc);
-  for(int iR=0;iR<m.num_rows;iR++)
-    for(int iC=0;iC<m.num_col;iC++)
-      m.values[iR][iC] = values[r+iR][c+iC];
-  return m;
-}
-
 
 void Matrix::addColumn(Matrix& m)
 {
@@ -388,8 +382,6 @@ Matrix Matrix::getCofactor(int r, int c)
 }
 
 
-
-
 Matrix Matrix::getMinormatrix()
 {
 Matrix c(num_rows,num_col,0);
@@ -403,41 +395,8 @@ m=this->getCofactor(i,j);
 d=m.getDeterminant();
 c.values[i][j]=d;
 
-
-
-
 }
-
 return c;
-
-
-}
-
-
-Matrix Matrix::cofactor()
-{
- Matrix c(num_rows,num_col,0);
- c=this->getMinormatrix();
-
-
-
- for(int i=0;i<num_rows;i++)
-  for(int j=0;j<num_col;j++)
-   {
-    if((i+j)%2==1)
-    c.values[i][j]=-c.values[i][j];
-    else
-    c.values[i][j]=c.values[i][j];
-
-
-
-
-   }
-   return c;
-
-
-
-
 
 }
 
@@ -487,17 +446,21 @@ return s;
 //   return os;
 // }
 
-friend istream &operator>>( istream &input, Matrix &D )
+istream &operator>>( istream &input, Matrix &D )
 
-{ for (int i = 0; i<D.num_rows; i++)
- { for (int j = 0; j<D.num_col; j++)
- { input >> D.values[i][j] ;
+{
+  for (int i = 0; i<D.num_rows; i++)
+ {
+   for (int j = 0; j<D.num_col; j++)
+ {
+   input >> D.values[i][j] ;
  }
  }
  return input;
  }
 
-friend ostream &operator<< (ostream &output, const Matrix &D) {
+ostream &operator<< (ostream &output, const Matrix &D)
+ {
 	for (int i = 0; i<D.num_rows; i++)
 	{
 		for (int j = 0; j<D.num_col; j++)
@@ -526,15 +489,15 @@ Matrix Matrix::getTranspose()
  return temp;
 }
 
+
 Matrix Matrix::multiply_by_no( double d)
 {
-  Matrix m;
-  m=*this;
+  Matrix m(num_rows,num_col,0);
    for(int i=0;i<num_rows;i++)
 
      for(int j=0;j<num_col ;j++)
      {
-        m.values[i][j]=(m.values[i][j])*d;
+        m.values[i][j]=((*this).values[i][j])*d;
      }
    return m;
 
@@ -543,6 +506,26 @@ Matrix Matrix::multiply_by_no( double d)
 
 
 
+
+
+// Matrix Matrix::inverse()
+// {
+//   Matrix c(num_rows,num_col,0);
+//
+//   double d,one_over_det;
+//   d=(*this).getDeterminant();
+//
+//   one_over_det=1/d;
+//
+//   c=this->cofactor();
+//
+//   c=c.getTranspose();
+//
+//   c=c.multiply_by_no(one_over_det);
+//
+//   return c;
+//
+// }
 
 Matrix Matrix::inverse()
 {
@@ -563,22 +546,16 @@ Matrix Matrix::inverse()
   inversed_mat=s.multiply_by_no(one_over_det);
 
   return inversed_mat;
-
-
-
-
-
-
 }
 
 Matrix Matrix::division(Matrix a, Matrix b)
 {
-Matrix output;
 Matrix c;
 c=b.inverse();
-output=a*c;
-return output;
+c=a*c;
+return c;
 }
+
 
 
 Matrix Matrix::operator/(Matrix b)
