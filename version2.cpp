@@ -922,6 +922,7 @@ void getMatrixDimension(string s, int &nR, int &nC) //Function gets num_colums,n
 
 }
 
+<<<<<<< HEAD
 void stringParsing(string s, string &m, char *Name) //function returns array of double values, name of the matrices
 {
   int num = 0;
@@ -940,6 +941,14 @@ void stringParsing(string s, string &m, char *Name) //function returns array of 
 		num++;
 		tokeName = strtok(NULL, spearators);
 	}
+=======
+void strignParsing(string s, string &m, string &name) //function returns array of double values, name of the matrices
+{
+  int length = s.length();
+  int pos = s.find("=");
+  name = s.substr(0, pos-1);
+  m = s.substr(pos+2, length);
+>>>>>>> dcf0d718d9a0a912124607b21bc473d8492b5bd5
 }
 
 void operationParsing(string s, char& in1, char& in2, char& out, char& operation) //function parses operation line to in1,in2,out,operation
@@ -1062,6 +1071,7 @@ int testMultiVariables(string s) //tests if there is multiVariable in the same l
 
 int main(int argc, char*argv[])
 {
+<<<<<<< HEAD
   string s = "A = [1 2; 3 4]";
   string m = " ";
   char* name =  new char[1];
@@ -1069,6 +1079,17 @@ int main(int argc, char*argv[])
   Matrix w(m);
   print(w);
 
+=======
+
+  string s = "A = [1 2; 3 4]";
+  string m = " ", name= " ";
+  strignParsing(s, m, name);
+  cout<<m<<endl;
+  Matrix w(m);
+  print(w);
+
+
+>>>>>>> dcf0d718d9a0a912124607b21bc473d8492b5bd5
 //   Matrix c(3, 3, -1.443, 0.3246, 1.82425, -1.663, -0.557, 3.9724, 0.409, 0.0868, 0.6839);
 //   Matrix n(3,3,3.0,0.0,2.0,2.0,0.0,-2.0,0.0,1.0,1.0);
 //   Matrix m(3, 3, 1.2, 2.1, 3.4, 4.1, 7.2, 3.4, 7.1, 5.2, 4.6);
@@ -1102,6 +1123,7 @@ int main(int argc, char*argv[])
 // // string s ="[7.3 4.8; 3.8 7.2; 3.4 7.5]";
 // //   Matrix w (s);
 // //   print(w);
+<<<<<<< HEAD
 
 // string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
 //
@@ -1320,6 +1342,226 @@ int main(int argc, char*argv[])
 // 		}
 //
 // 	}
+=======
+//
+string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
+
+	int nLines; //number Of lines
+
+	if (argc > 1)
+
+	{
+
+		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
+
+		for (int i = 0; i < nLines; i++)
+
+		{
+
+			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
+
+			int multiVariable = 0;
+
+			multiVariable = testMultiVariables(inputFileLines[i]); //function tests if there multi variable in the same line and returns number of the variables
+
+			if (lineType)
+
+			{
+
+				int nR, nC;
+
+				char *name = new char[multiVariable];
+
+				getMatrixDimension(inputFileLines[i], nR, nC); //Function gets num_colums,num_rows
+
+				string mat = " "; //string of matrix
+
+				strignParsing(inputFileLines[i], values, name); //function returns array of double values, name of the matrix
+
+				for (int j = 0; j < multiVariable; j++)
+
+				{
+
+					//////////////////////////	//Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
+
+				}
+
+				if (inputFileLines[i].rfind(';') < inputFileLines[i].rfind(']'))
+
+				{
+
+					//////////////////////////////////////Get deteriment and print it
+
+				}
+
+			}
+
+			else
+
+			{
+
+				char in1, in2, out, operation;
+
+				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+
+				switch (operation)
+
+				{
+
+				case '+':
+
+			////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
+
+					break;
+
+				case '-':
+
+			/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+
+					break;
+
+				case '*':
+
+			/////////////////////////////put mulitplication function from matrix
+
+					break;
+
+				case '/':
+
+			////////////////////////////put division function
+
+					break;
+
+				case '1':
+
+			///////////////////////////put """""""inverse""""""" function of out = in1'
+
+					break;
+
+				case'.':
+
+					int num = (int)in1 - 48;
+
+			/////////////////////////put division function tht divide num/matrix in2  = matrix out
+
+					break;
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if (argc <= 1)
+
+	{
+
+		string line;
+
+		while (getline(cin, line))
+
+		{
+
+			int multiVariable = 0;
+
+			multiVariable = testMultiVariables(line); //function tests if there multi variable in the same line and returns number of the variables
+
+			cout << ">";
+
+			bool lineType = lineTest(line);
+
+			if (lineType)
+
+			{
+
+				int nR, nC;
+
+				char *name = new char[multiVariable];
+
+				getMatrixDimension(line, nR, nC); //Function gets num_colums,num_row
+
+				double *values = new double[nR*nC]; //array of values
+
+				strignParsing(line, values, name); //function returns array of double values, name of the matrix
+
+				for (int j = 0; j < multiVariable; j++)
+
+				{
+
+					////////////////////////////Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
+
+				}
+
+				if (line.rfind(';') < line.rfind(']'))
+
+				{
+
+					//////////////////////////////////////Get deteriment and print it
+
+				}
+
+			}
+
+			else
+
+			{
+
+				char in1, in2, out, operation;
+
+				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+
+				switch (operation)
+
+				{
+
+				case '+':
+
+					////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
+
+					break;
+
+				case '-':
+
+					/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+
+					break;
+
+				case '*':
+
+					/////////////////////////////put mulitplication function from matrix
+
+					break;
+
+				case '/':
+
+					////////////////////////////put division function
+
+					break;
+
+				case '1':
+
+					///////////////////////////put """""""inverse""""""" function of out = in1'
+
+					break;
+
+				case'.':
+
+					int num = (int)in1 - 48;
+
+					/////////////////////////put division function tht divide num/matrix in2  = matrix out
+
+					break;
+
+				}
+
+			}
+
+		}
+
+	}
+>>>>>>> dcf0d718d9a0a912124607b21bc473d8492b5bd5
 
   return 0;
 }
