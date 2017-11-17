@@ -17,6 +17,7 @@ class Matrix{
 
 public:
   int num_rows, num_col;
+  string name;
 
 
 
@@ -1104,223 +1105,232 @@ int main(int argc, char*argv[])
 // //   Matrix w (s);
 // //   print(w);
 
-// string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
-//
-// 	int nLines; //number Of lines
-//
-// 	if (argc > 1)
-//
-// 	{
-//
-// 		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
-//
-// 		for (int i = 0; i < nLines; i++)
-//
-// 		{
-//
-// 			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
-//
-// 			int multiVariable = 0;
-//
-// 			multiVariable = testMultiVariables(inputFileLines[i]); //function tests if there multi variable in the same line and returns number of the variables
-//
-// 			if (lineType)
-//
-// 			{
-//
-// 				int nR, nC;
-//
-// 				char *name = new char[multiVariable];
-//
-// 				getMatrixDimension(inputFileLines[i], nR, nC); //Function gets num_colums,num_rows
-//
-// 				double *values = new double[nR*nC]; //array of values
-//
-// 				strignParsing(inputFileLines[i], values, name); //function returns array of double values, name of the matrix
-//
-// 				for (int j = 0; j < multiVariable; j++)
-//
-// 				{
-//
-// 					//////////////////////////	//Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
-//
-// 				}
-//
-// 				if (inputFileLines[i].rfind(';') < inputFileLines[i].rfind(']'))
-//
-// 				{
-//
-// 					//////////////////////////////////////Get deteriment and print it
-//
-// 				}
-//
-// 			}
-//
-// 			else
-//
-// 			{
-//
-// 				char in1, in2, out, operation;
-//
-// 				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-//
-// 				switch (operation)
-//
-// 				{
-//
-// 				case '+':
-//
-// 			////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
-//
-// 					break;
-//
-// 				case '-':
-//
-// 			/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-//
-// 					break;
-//
-// 				case '*':
-//
-// 			/////////////////////////////put mulitplication function from matrix
-//
-// 					break;
-//
-// 				case '/':
-//
-// 			////////////////////////////put division function
-//
-// 					break;
-//
-// 				case '1':
-//
-// 			///////////////////////////put """""""inverse""""""" function of out = in1'
-//
-// 					break;
-//
-// 				case'.':
-//
-// 					int num = (int)in1 - 48;
-//
-// 			/////////////////////////put division function tht divide num/matrix in2  = matrix out
-//
-// 					break;
-//
-// 				}
-//
-// 			}
-//
-// 		}
-//
-// 	}
-//
-// 	if (argc <= 1)
-//
-// 	{
-//
-// 		string line;
-//
-// 		while (getline(cin, line))
-//
-// 		{
-//
-// 			int multiVariable = 0;
-//
-// 			multiVariable = testMultiVariables(line); //function tests if there multi variable in the same line and returns number of the variables
-//
-// 			cout << ">";
-//
-// 			bool lineType = lineTest(line);
-//
-// 			if (lineType)
-//
-// 			{
-//
-// 				int nR, nC;
-//
-// 				char *name = new char[multiVariable];
-//
-// 				getMatrixDimension(line, nR, nC); //Function gets num_colums,num_row
-//
-// 				double *values = new double[nR*nC]; //array of values
-//
-// 				strignParsing(line, values, name); //function returns array of double values, name of the matrix
-//
-// 				for (int j = 0; j < multiVariable; j++)
-//
-// 				{
-//
-// 					////////////////////////////Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
-//
-// 				}
-//
-// 				if (line.rfind(';') < line.rfind(']'))
-//
-// 				{
-//
-// 					//////////////////////////////////////Get deteriment and print it
-//
-// 				}
-//
-// 			}
-//
-// 			else
-//
-// 			{
-//
-// 				char in1, in2, out, operation;
-//
-// 				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-//
-// 				switch (operation)
-//
-// 				{
-//
-// 				case '+':
-//
-// 					////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
-//
-// 					break;
-//
-// 				case '-':
-//
-// 					/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-//
-// 					break;
-//
-// 				case '*':
-//
-// 					/////////////////////////////put mulitplication function from matrix
-//
-// 					break;
-//
-// 				case '/':
-//
-// 					////////////////////////////put division function
-//
-// 					break;
-//
-// 				case '1':
-//
-// 					///////////////////////////put """""""inverse""""""" function of out = in1'
-//
-// 					break;
-//
-// 				case'.':
-//
-// 					int num = (int)in1 - 48;
-//
-// 					/////////////////////////put division function tht divide num/matrix in2  = matrix out
-//
-// 					break;
-//
-// 				}
-//
-// 			}
-//
-// 		}
-//
-// 	}
+string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
+
+	int nLines; //number Of lines
+
+	if (argc > 1)
+
+	{
+
+		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
+
+		for (int i = 0; i < nLines; i++)
+
+		{
+
+			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
+
+			int multiVariable = 0;
+
+			multiVariable = testMultiVariables(inputFileLines[i]); //function tests if there multi variable in the same line and returns number of the variables
+
+			if (lineType)
+
+			{
+
+				int nR, nC;
+
+				char *name = new char[multiVariable];
+
+				getMatrixDimension(inputFileLines[i], nR, nC); //Function gets num_colums,num_rows
+
+				string m = "";
+
+				stringParsing(inputFileLines[i], m, name); //function returns array of double values, name of the matrix
+
+				for (int j = 0; j < multiVariable; j++)
+
+				{
+
+					//////////////////////////	//Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
+
+				}
+
+				if (inputFileLines[i].rfind(';') < inputFileLines[i].rfind(']'))
+
+				{
+
+					//////////////////////////////////////Get deteriment and print it
+
+				}
+
+			}
+
+			else
+
+			{
+
+				char in1, in2, out, operation;
+
+				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+
+				switch (operation)
+
+				{
+
+				case '+':
+
+			////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
+
+					break;
+
+				case '-':
+
+			/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+
+					break;
+
+				case '*':
+
+			/////////////////////////////put mulitplication function from matrix
+
+					break;
+
+				case '/':
+
+			////////////////////////////put division function
+
+					break;
+
+				case '1':
+
+			///////////////////////////put """""""inverse""""""" function of out = in1'
+
+					break;
+
+				case'.':
+
+					int num = (int)in1 - 48;
+
+			/////////////////////////put division function tht divide num/matrix in2  = matrix out
+
+					break;
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if (argc <= 1)
+
+	{
+
+		string line;
+
+		while (getline(cin, line))
+
+		{
+
+			int multiVariable = 0;
+
+			multiVariable = testMultiVariables(line); //function tests if there multi variable in the same line and returns number of the variables
+
+			cout << ">";
+
+			bool lineType = lineTest(line);
+
+			if (lineType)
+
+			{
+
+				int nR, nC;
+
+				char *name = new char[multiVariable];
+
+				getMatrixDimension(line, nR, nC); //Function gets num_colums,num_row
+
+				string m = ""; //array of values
+
+				stringParsing(line, m, name); //function returns array of double values, name of the matrix
+
+        Matrix matrices[100];
+
+				for (int j = 0; j < multiVariable; j++)
+
+				{
+
+					///Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
+          Matrix w(m);
+          matrices[j] = w;
+          matrices[j].name = name[j];
+
+				}
+
+				if (line.rfind(';') < line.rfind(']'))
+
+				{
+
+					//////////////////////////////////////Get deteriment and print it
+          for (int i = 0; i<multiVariable; i++)
+          {
+            cout<<name[i]<<" = "<<endl;
+            print(matrices[i]);
+          }
+				}
+
+			}
+
+			else
+
+			{
+
+				char in1, in2, out, operation;
+
+				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+
+				switch (operation)
+
+				{
+
+				case '+':
+
+					////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
+
+					break;
+
+				case '-':
+
+					/////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+
+					break;
+
+				case '*':
+
+					/////////////////////////////put mulitplication function from matrix
+
+					break;
+
+				case '/':
+
+					////////////////////////////put division function
+
+					break;
+
+				case '1':
+
+					///////////////////////////put """""""inverse""""""" function of out = in1'
+
+					break;
+
+				case'.':
+
+					int num = (int)in1 - 48;
+
+					/////////////////////////put division function tht divide num/matrix in2  = matrix out
+
+					break;
+
+				}
+
+			}
+
+		}
+
+	}
 
   return 0;
 }

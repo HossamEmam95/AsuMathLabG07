@@ -104,21 +104,13 @@ void getMatrixDimension(string s, int &nR, int &nC) //Function gets num_colums,n
 		nC = nSpaces / nR;
 }
 
-void strignParsing(string s, double *values, char *Name) //function returns array of double values, name of the matrices
+void strignParsing(string s, string m, char *Name) //function returns array of double values, name of the matrices
 {
 	int n = 0, m = 0;
 	char *newline = new char[100];
 	char *variables = new char[100];
-	strcpy(newline, s.c_str() + s.rfind('='));
-	char* spearators = "=[] ;,";
-	char* token = strtok(newline, spearators);
-	while (token) //making array of double values
-	{
-		double number = atof(token);
-		values[n] = number;
-		n++;
-		token = strtok(NULL, spearators);
-	}
+  strcpy(newline, s.c_str() + s.rfind('='))
+	m = newline;
 	s.erase(s.begin() + s.rfind("="), s.end());
 	strcpy(variables, s.c_str());
 	char* tokeName = strtok(variables, spearators);
