@@ -92,28 +92,27 @@ void Matrix::copy(string s)
 
   char* buffer = new char[s.length()+1];
   strcpy(buffer, s.c_str());
-  //char* lineContext;
+  char* lineContext;
   const char* lineSeparators = ";\r\n";
-  char* line = strtok(buffer, lineSeparators);
+  char* line = strtok_r(buffer, lineSeparators, &lineContext);
   while(line)
     {
       Matrix row;
-      // char* context;
+      char* context;
       const char* separators = " []";
-      char* token = strtok(line, separators);
+      char* token = strtok_r(line, separators, &context);
         while(token)
         {
           Matrix item = atof(token);
           row.addColumn(item);
-          token = strtok(NULL, separators);
+          token = strtok_r(NULL, separators, &context);
         }
         if(row.num_col>0 && (row.num_col==num_col || num_rows==0))
         addRow(row);
-        line = strtok(NULL, lineSeparators);
+        line = strtok_r(NULL, lineSeparators, &lineContext);
     }
     delete[] buffer;
   }
-
 
 
 Matrix::Matrix(double d)
@@ -328,14 +327,15 @@ Matrix Matrix::operator+()
 }
 
 
-void Matrix::setSubMatrix(int r, int c, Matrix& m)
+Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
 {
-  if ((r+m.num_rows)>num_rows||(c+m.num_col)>num_col)
-    throw("Invalid matrix dimensions for this operation");
+  if((r+nr)>num_rows || (c+nc)>num_col  )throw("Invalid matrix dimension");
 
-    for(int iR =0; iR < num_rows; iR++)
-      for(int iC=0; iC<num_col; iC++)
-        values[iR+r][iC+c] = m.values[iR][iC];
+  Matrix m(nr, nc);
+  for(int iR=0;iR<m.num_rows;iR++)
+    for(int iC=0;iC<m.num_col;iC++)
+      m.values[iR][iC] = values[r+iR][c+iC];
+  return m;
 }
 
 

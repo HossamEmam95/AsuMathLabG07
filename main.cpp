@@ -52,5 +52,11 @@ Matrix l;
 l=a/b;
 print(l);
 
+string s ="[7.3 4.8; 3.8 7.2; 3.4 7.5]";
+//  Matrix w;
+  Matrix w (s);
+  print(w);
+
+
   return 0;
 }
