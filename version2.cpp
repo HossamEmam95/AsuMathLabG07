@@ -1255,11 +1255,12 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 
 				{
 
-					///Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
+					///Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",value
           Matrix w(m);
           matrices[ptr] = w;
           matrices[ptr].name = name[j];
           ptr++;
+
 
 				}
 
@@ -1271,7 +1272,7 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
           for (int i = 0; i<multiVariable; i++)
           {
             cout<<name[i]<<" = "<<endl;
-            print(matrices[i]);
+            print(matrices[ptr-1]);
           }
 				}
 
@@ -1284,7 +1285,6 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 				char in1, in2, out, operation;
 
 				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-        cout<<"out = "<<out<<endl;
 				switch (operation)
 
 				{
@@ -1297,17 +1297,17 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
             Matrix output(zero);
             output.name = out;
             matrices[ptr] = output;
-            cout<<ptr<<endl;
-            cout<<matrices[0].name<<endl;
-            cout<<matrices[1].name<<endl;
-
-            for (int i = 0; i <= ptr; i++)
+            ptr++;
+            for (int i = 0; i < ptr; i++)
             {
               if (matrices[i].name == in1) {first = matrices[i];}
               if (matrices[i].name == in2) second = matrices[i];
-              if (matrices[i].name == out){ output = first + second; print(output);};
-
+              if (matrices[i].name == out){output = first + second;}
             }
+              cout<<out<<" = ";
+              print(output);
+
+
 					break;}
 
 				case '-':{
