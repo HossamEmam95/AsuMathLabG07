@@ -17,7 +17,7 @@ class Matrix{
 
 public:
   int num_rows, num_col;
-  string name;
+  char name;
 
 
 
@@ -218,6 +218,7 @@ void Matrix::copy(const Matrix& m)
 
   this-> num_rows = m.num_rows;
   this-> num_col = m.num_col;
+  this-> name = m.name;
   if ((num_col*num_rows) == 0 ){values = NULL; return;}
 
   values = new double*[num_rows];
@@ -1291,11 +1292,12 @@ string *inputFileLines = new string[10]; //Array Of lines, """""""""""try to con
 				case '+':
 
 					////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
-            Matrixe first;
-            Matrixe second;
-            Matrixe output;
+            string zero = "[]";
+            Matrix first(zero);
+            Matrix second(zero);
+            Matrix output(zero);
             output.name = out;
-            Matrices[ptr] = output;
+            matrices[ptr] = output;
             for (int i = 0; i < 10; i++)
             {
               if (matrices[i].name == in1) first = matrices[i];
