@@ -1,16 +1,23 @@
 #include "header.h"
 
+#define EPS 1e-10
 Matrix::Matrix()
 {
   num_rows = num_col = 0;
   values = NULL;
+    name='\0';
 }
 
 Matrix::~Matrix()
 {
 reset();
 }
-
+Matrix::Matrix(string s)
+{
+  num_rows=num_col=0;
+  values=NULL;
+  copy(s);
+}
 Matrix::Matrix(int num_rows, int num_col, int initialization, double initializationValue)
 {
     this->num_rows = num_rows;
@@ -72,6 +79,7 @@ void Matrix::copy(const Matrix& m)
 
   this-> num_rows = m.num_rows;
   this-> num_col = m.num_col;
+  this-> name = m.name;
   if ((num_col*num_rows) == 0 ){values = NULL; return;}
 
   values = new double*[num_rows];
@@ -115,6 +123,7 @@ void Matrix::copy(string s)
   }
 
 
+
 Matrix::Matrix(double d)
 {
   num_rows = num_rows = 0;
@@ -145,6 +154,7 @@ void Matrix::reset()
   }
   num_rows = num_col = 0;
   values = NULL;
+    name='\0';
 }
 
 
@@ -326,6 +336,16 @@ Matrix Matrix::operator+()
   return *this;
 }
 
+
+// void Matrix::setSubMatrix(int r, int c, Matrix& m)
+// {
+//   if ((r+m.num_rows)>num_rows||(c+m.num_col)>num_col)
+//     throw("Invalid matrix dimensions for this operation");
+//
+//     for(int iR =0; iR < num_rows; iR++)
+//       for(int iC=0; iC<num_col; iC++)
+//         values[iR+r][iC+c] = m.values[iR][iC];
+// }
 void Matrix::setSubMatrix(int r, int c, Matrix &m) {/////////////////////////////////////////
   if ((r + m.num_rows) > num_rows || (c + m.num_col) > num_col)
     throw("Invalid matrix dimension");
@@ -333,6 +353,7 @@ void Matrix::setSubMatrix(int r, int c, Matrix &m) {////////////////////////////
     for (int iC = 0; iC < m.num_col; iC++)
       values[r + iR][c + iC] = m.values[iR][iC];
 }
+
 
 Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
 {
@@ -345,17 +366,18 @@ Matrix Matrix::getSubMatrix(int r, int c, int nr, int nc)
   return m;
 }
 
-void Matrix::addColumn(Matrix& m)
-{
-  Matrix n(max(num_rows, m.num_rows), num_col+m.num_col);
+
+
+
+void Matrix::addColumn(Matrix &m) {
+  Matrix n(max(num_rows, m.num_rows), num_col + m.num_col);
   n.setSubMatrix(0, 0, *this);
   n.setSubMatrix(0, num_col, m);
   *this = n;
 }
 
-void Matrix::addRow(Matrix& m)
-{
-  Matrix n(num_rows+n.num_rows, max(num_col,m.num_col));
+void Matrix::addRow(Matrix &m) {
+  Matrix n(num_rows + m.num_rows, max(num_col, m.num_col));
   n.setSubMatrix(0, 0, *this);
   n.setSubMatrix(num_rows, 0, m);
   *this = n;
@@ -382,40 +404,164 @@ Matrix Matrix::getCofactor(int r, int c)
 }
 
 
-Matrix Matrix::getMinormatrix()
+Matrix Matrix::gaussianEliminate()
 {
-Matrix c(num_rows,num_col,0);
-Matrix m;
-double d;
-for(int i=0;i<num_rows;i++)
-for(int j=0;j<num_col;j++)
+    Matrix Ab(*this);
+    int rows = Ab.num_rows;
+    int cols = Ab.num_col;
+    int Acols = cols - 1;
+
+    int i = 0; // row tracker
+    int j = 0; // column tracker
+
+    // iterate through the rows
+    while (i < rows)
+    {
+        // find a pivot for the row
+        bool pivot_found = false;
+        while (j < Acols && !pivot_found)
+        {
+            if (Ab(i, j) != 0) { // pivot not equal to 0
+                pivot_found = true;
+            } else { // check for a possible swap
+                int max_row = i;
+                double max_val = 0;
+                for (int k = i + 1; k < rows; ++k)
+                {
+                    double cur_abs = Ab(k, j) >= 0 ? Ab(k, j) : -1 * Ab(k, j);
+                    if (cur_abs > max_val)
+                    {
+                        max_row = k;
+                        max_val = cur_abs;
+                    }
+                }
+                if (max_row != i) {
+                    Ab.swapRows(max_row, i);
+                    pivot_found = true;
+                } else {
+                    j++;
+                }
+            }
+        }
+
+        // perform elimination as normal if pivot was found
+        if (pivot_found)
+        {
+            for (int t = i + 1; t < rows; ++t) {
+                for (int s = j + 1; s < cols; ++s) {
+                    Ab(t, s) = Ab(t, s) - Ab(i, s) * (Ab(t, j) / Ab(i, j));
+                    if (Ab(t, s) < EPS && Ab(t, s) > -1*EPS)
+                        Ab(t, s) = 0;
+                }
+                Ab(t, j) = 0;
+            }
+        }
+
+        i++;
+        j++;
+    }
+
+    return Ab;
+}
+
+Matrix Matrix::rowReduceFromGaussian()
 {
+    Matrix R(*this);
+    int rows = R.num_rows;
+    int cols = R.num_col;
 
-m=this->getCofactor(i,j);
-d=m.getDeterminant();
-c.values[i][j]=d;
+    int i = rows - 1; // row tracker
+    int j = cols - 2; // column tracker
 
+    // iterate through every row
+    while (i >= 0)
+    {
+        // find the pivot column
+        int k = j - 1;
+        while (k >= 0) {
+            if (R(i, k) != 0)
+                j = k;
+            k--;
+        }
+
+        // zero out elements above pivots if pivot not 0
+        if (R(i, j) != 0) {
+
+            for (int t = i - 1; t >= 0; --t) {
+                for (int s = 0; s < cols; ++s) {
+                    if (s != j) {
+                        R(t, s) = R(t, s) - R(i, s) * (R(t, j) / R(i, j));
+                        if (R(t, s) < EPS && R(t, s) > -1*EPS)
+                            R(t, s) = 0;
+                    }
+                }
+                R(t, j) = 0;
+            }
+
+            // divide row by pivot
+            for (int k = j + 1; k < cols; ++k) {
+                R(i, k) = R(i, k) / R(i, j);
+                if (R(i, k) < EPS && R(i, k) > -1*EPS)
+                    R(i, k) = 0;
+            }
+            R(i, j) = 1;
+
+        }
+
+        i--;
+        j--;
+    }
+
+    return R;
 }
-return c;
 
-}
-
-
-
-
-
-double Matrix::getDeterminant()
+Matrix Matrix::createIdentity(int size)
 {
-  if(num_rows!=num_col)throw("Invalid matrix dimensions");
-  if(num_rows==1 && num_col==1)return values[0][0];
-
-  double value = 0 , m = 1;
-  for(int iR=0; iR<num_rows; iR++)
-  {
-    value+= m * values[0][iR] * getCofactor(0, iR).getDeterminant(); m *= -1;
-  }
-  return value;
+    Matrix temp(size, size);
+    for (int i = 0; i < temp.num_rows; ++i) {
+        for (int j = 0; j < temp.num_col; ++j) {
+            if (i == j) {
+                temp.values[i][j] = 1;
+            } else {
+                temp.values[i][j] = 0;
+            }
+        }
+    }
+    return temp;
 }
+
+Matrix Matrix::augment(Matrix A, Matrix B)
+{
+    Matrix AB(A.num_rows, A.num_col + B.num_col);
+    for (int i = 0; i < AB.num_rows; ++i) {
+        for (int j = 0; j < AB.num_col; ++j) {
+            if (j < A.num_col)
+                AB(i, j) = A(i, j);
+            else
+                AB(i, j) = B(i, j - B.num_col);
+        }
+    }
+    return AB;
+}
+
+
+Matrix Matrix::inverse()
+{
+    Matrix I = Matrix::createIdentity(num_rows);
+    Matrix AI = Matrix::augment(*this, I);
+    Matrix U = AI.gaussianEliminate();
+    Matrix IAInverse = U.rowReduceFromGaussian();
+    Matrix AInverse(num_rows, num_rows);
+    for (int i = 0; i < AInverse.num_rows; ++i) {
+        for (int j = 0; j < AInverse.num_col; ++j) {
+            AInverse(i, j) = IAInverse(i, j + num_col);
+        }
+    }
+    return AInverse;
+}
+
+
+
 string Matrix::getString()
 {
 string s;
@@ -432,45 +578,14 @@ s+="\n";
 return s;
 }
 
-// istream& operator >> (istream &is, Matrix& m)
-// {
-//   string s;
-//   getline(is, s, ']');
-//   s+="]";
-//   m = Matrix(s);
-//   return is;
-// }
-// ostream& operator << (ostream &os, Matrix& m)
-// {
-//   os<<m.getString();
-//   return os;
-// }
 
-istream &operator>>( istream &input, Matrix &D )
-
+void Matrix::swapRows(int r1, int r2)
 {
-  for (int i = 0; i<D.num_rows; i++)
- {
-   for (int j = 0; j<D.num_col; j++)
- {
-   input >> D.values[i][j] ;
- }
- }
- return input;
- }
-
-ostream &operator<< (ostream &output, const Matrix &D)
- {
-	for (int i = 0; i<D.num_rows; i++)
-	{
-		for (int j = 0; j<D.num_col; j++)
-		{
-			output << D.values[i][j] << " ";
-		}
-		output << endl;
-	}
-	return output;
+    double *temp = values[r1];
+    values[r1] = values[r2];
+    values[r2] = temp;
 }
+
 
 Matrix Matrix::getTranspose()
 
@@ -489,7 +604,6 @@ Matrix Matrix::getTranspose()
  return temp;
 }
 
-
 Matrix Matrix::multiply_by_no( double d)
 {
   Matrix m(num_rows,num_col,0);
@@ -506,48 +620,6 @@ Matrix Matrix::multiply_by_no( double d)
 
 
 
-
-
-// Matrix Matrix::inverse()
-// {
-//   Matrix c(num_rows,num_col,0);
-//
-//   double d,one_over_det;
-//   d=(*this).getDeterminant();
-//
-//   one_over_det=1/d;
-//
-//   c=this->cofactor();
-//
-//   c=c.getTranspose();
-//
-//   c=c.multiply_by_no(one_over_det);
-//
-//   return c;
-//
-// }
-
-Matrix Matrix::inverse()
-{
-  Matrix c;
-  Matrix s;
-  Matrix inversed_mat;
-  c=*this;
-
-  double d,one_over_det;
-  d=(*this).getDeterminant();
-
-  one_over_det=1/d;
-
-  c=this->cofactor();
-
-  s=c.getTranspose();
-
-  inversed_mat=s.multiply_by_no(one_over_det);
-
-  return inversed_mat;
-}
-
 Matrix Matrix::division(Matrix a, Matrix b)
 {
 Matrix c;
@@ -555,7 +627,6 @@ c=b.inverse();
 c=a*c;
 return c;
 }
-
 
 
 Matrix Matrix::operator/(Matrix b)

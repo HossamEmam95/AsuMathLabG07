@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
-#include <fstream>
 //#include<curses.h>
 //#include <ncurses.h>
 #include <algorithm>
@@ -16,6 +15,7 @@ class Matrix{
 
 public:
   int num_rows, num_col;
+  char name;
 
 
 
@@ -33,7 +33,7 @@ public:
   Matrix(int num_rows, int num_col, double first, ...);
   Matrix(const Matrix& m);
   Matrix(double d);
-  Matrix(std::string s);
+  Matrix(string s);
 
 
 //rawan
@@ -74,9 +74,7 @@ public:
 
   Matrix multiply_by_no( double d);
   Matrix getMinormatrix();
-  Matrix cofactor();
   Matrix operator/(Matrix b);
-  Matrix inverse();
   Matrix operator/(double d);
   void operator/=( Matrix b);
   void operator/=(double b);
@@ -91,8 +89,28 @@ public:
   Matrix operator+();
 
 
-friend istream &operator>>( istream &input, Matrix &D ) ; //Stream
-friend ostream &operator<< (ostream &output, const Matrix &D); //Stream
+  friend istream &operator>>( istream &input, Matrix &D )
+
+  { for (int i = 0; i<D.num_rows; i++)
+   { for (int j = 0; j<D.num_col; j++)
+   { input >> D.values[i][j] ;
+   }
+   }
+   return input;
+   }
+
+  friend ostream &operator<< (ostream &output, const Matrix &D) {
+  	for (int i = 0; i<D.num_rows; i++)
+  	{
+  		for (int j = 0; j<D.num_col; j++)
+  		{
+  			output << D.values[i][j] << " ";
+  		}
+  		output << endl;
+  	}
+  	return output;
+  }
+
 
 //mostafa
   void setSubMatrix(int iR,int iC, Matrix& m);
@@ -111,8 +129,13 @@ friend ostream &operator<< (ostream &output, const Matrix &D); //Stream
   int getnR(){return num_rows;};
   int getnC(){return num_col;};
 //doaa & zienab
-  double getDeterminant();
-  Matrix getTranspose();
-  Matrix getInverse();
+static Matrix augment(Matrix, Matrix);
+Matrix gaussianEliminate();
+Matrix rowReduceFromGaussian();
+Matrix inverse();
+void swapRows(int r1, int r2);
+Matrix createIdentity(int size);
+Matrix getTranspose();
+
 
 };
