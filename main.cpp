@@ -142,7 +142,7 @@ void stringParsing(string s, string &m, char *Name) //function returns array of 
 	char *variables = new char[100000];
   strcpy(newline, s.c_str() + s.find('['));
   m = newline;
-  char* spearators = "=[] ;,";
+  char* spearators = (char*)"=[] ;,";
 	s.erase(s.begin() + s.rfind("="), s.end());
 	strcpy(variables, s.c_str());
 	char* tokeName = strtok(variables, spearators);
