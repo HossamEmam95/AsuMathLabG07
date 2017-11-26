@@ -79,15 +79,10 @@ int done =0;
         lines[i]=line;
         i++;
         done=1;
-           //breaked=1;
-        //break;
       }
-/*   if(breaked==1)
-   break;*/
+
 		}
-//cout<<i<<endl;
-//for(int j=0;j<2;j++)
-//cout<<lines[i]<<endl;
+
 	done=0;
 }
 	nlines = i;
@@ -444,7 +439,6 @@ string *inputFileLines = new string[100]; //Array Of lines, """""""""""try to co
                   }
 
                     cout<<out<<" = "<<endl;
-                  //  cout<<matrices[ptr-1].name;
                     print( matrices[ptr-1] );
                     matrices[ptr-1].name=out;
 
@@ -512,9 +506,10 @@ string *inputFileLines = new string[100]; //Array Of lines, """""""""""try to co
                             output.values[r][c] = num/first.values[r][c];
                           }
                       }
-                      // matrices[ptr-1]=output;
+                      matrices[ptr-1]=output;
                       cout<<out<<" = "<<endl;
                       print(output);
+											matrices[ptr-1].name=out;
 
 
                     break;}
@@ -786,7 +781,7 @@ string *inputFileLines = new string[100]; //Array Of lines, """""""""""try to co
               matrices[ptr-1]=output;
               cout<<out<<" = "<<endl;
               print(output);
-
+              matrices[ptr-1].name=out;
 
             break;}
 
