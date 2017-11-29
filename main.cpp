@@ -301,7 +301,6 @@ Matrix OptimizedPower(Matrix m,int power){
 		}
 		temp *= n;
 		power -= pow(2,logarithm);
-		cout<<"\n "<<power;
 	}
 	return temp;
 }
@@ -316,21 +315,7 @@ int main(int argc, char*argv[])
   Matrix B(strB);
 
   print(A/B);
-cout <<"HERE WE GOES";
-  Matrix C = Eye(2,2); 
-  cout <<"\nC : \n";
-  print(C);
-Matrix F(2,2,1.0,2.0,4.0,3.0);
-	double t1 = clock();
-	Matrix D = Power(A,5);
-	cout << endl <<"Time = "<< clock() - t1<<"ms";
-	cout <<"\nD : \n";
-	print(D);
-	double t2 = clock();
-		Matrix Q = OptimizedPower(A,5);
-		cout << endl <<"Time = "<< clock() - t2<<"ms";
-		cout <<"\nQ : \n";
-		print(Q);
+  
 //
 // Matrix matrices[100];
 // int ptr = 0;
