@@ -286,7 +286,8 @@ Matrix Power(Matrix m,int power){
 	return n;
 }
 
-Matrix OptimizedPower(Matrix m,int power){
+Matrix OptimizedPower(Matrix m,int power){ 
+	// calculations show that this function is not perfered if the power less than 7
 	Matrix temp = Eye(m.num_rows,m.num_col); 
 	if(power%2){
 		temp =m;
