@@ -1,6 +1,7 @@
 #include "header.h"
-
+#include "cmath"
 #define EPS 1e-10
+
 Matrix::Matrix()
 {
   num_rows = num_col = 0;
@@ -32,7 +33,7 @@ Matrix::Matrix(int num_rows, int num_col, int initialization, double initializat
       {
         switch (initialization)
         {
-          case MI_ZEROS: values[iR][iC];
+          case MI_ZEROS: values[iR][iC]= 0; break;
           case MI_ONES: values[iR][iC] = 1; break;
           case MI_EYE: values[iR][iC] = (iR==iC)?1:0; break;
           case MI_RAND: values[iR][iC] = (rand()%1000000)/1000000.0; break;
@@ -659,6 +660,35 @@ void Matrix::operator/=(double b)
   double number =1/b;
 
 *this=this->multiply_by_no(number);
+}
 
+Matrix EYE(int n,int m){
+	Matrix temp(n,m,2);
+	return temp;
+}
 
+Matrix OptimizedPower(Matrix m,int power){
+	Matrix temp = EYE(m.num_rows,m.num_col); 
+	if(power%2){
+		temp =m;
+		power-=1;
+	}
+	while(power > 0){
+		Matrix n = m;
+		double logarithm = floor(log2(power));
+		for(int i =0;i <logarithm;i++){
+			n *= n;
+		}
+		temp *= n;
+		power -= pow(2,logarithm);
+		cout<<"\n "<<power;
+	}
+	return temp;
+}
+
+Matrix Matrix::operator^(int power)
+{
+  Matrix q = *this;
+  Matrix r = OptimizedPower(q,power);
+  return r;
 }
