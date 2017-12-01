@@ -286,24 +286,7 @@ Matrix Power(Matrix m,int power){
 	return n;
 }
 
-Matrix OptimizedPower(Matrix m,int power){ 
-	// calculations show that this function is not perfered if the power less than 7
-	Matrix temp = Eye(m.num_rows,m.num_col); 
-	if(power%2){
-		temp =m;
-		power-=1;
-	}
-	while(power > 0){
-		Matrix n = m;
-		double logarithm = floor(log2(power));
-		for(int i =0;i <logarithm;i++){
-			n *= n;
-		}
-		temp *= n;
-		power -= pow(2,logarithm);
-	}
-	return temp;
-}
+
 
 int main(int argc, char*argv[])
 {
