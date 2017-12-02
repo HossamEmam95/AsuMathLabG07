@@ -9,8 +9,7 @@
 #include "cmath"
 using namespace std;
 double operationSolving(string s){
-//this method calculate operation represnted by string argument 
-// the function perform power operation then mul & division then add & sub
+
 	double result;
 	int op_counter = 0;
 
@@ -107,9 +106,59 @@ double operationSolving(string s){
 	
 	return numbers[0];
 }
+
+
+double bigOperationSolving(string s){
+	double result;
+	int start = 0;
+	int end = 0;
+	string new_operation("");
+	for(int i = 0; i <s.length();i++){
+		int num1 = 0;
+		int num2 = 0;
+		if(s[i] == '('){
+			num1++;
+			start = i+1;
+			for(int j = i+1;j<s.length();j++){
+				if(s[j] == '('){
+					num1++;
+				}
+				else if (s[j] == ')'){
+					num2++;
+					if(num1 == num2){
+						end = j-1;
+						i = j ;
+						break;
+					}					
+				}
+			}
+			string smallOperation = s.substr(start,(end-start+1));
+			double solution;
+			if(smallOperation.find('(') !=string::npos){
+				
+				solution = bigOperationSolving(smallOperation);
+			}
+			else{
+				solution = operationSolving(smallOperation);
+			}
+			char buffer[50];
+			double n = snprintf(buffer,50,"%lf",solution);
+			cout<<"("<<smallOperation<<")"<<endl;
+			new_operation += buffer;
+		}
+		else{
+				new_operation += s[i];
+		}
+	}
+	result = operationSolving(new_operation);
+	return result;	
+}
+
+
+
 int main(){
 
-	double d = operationSolving("1+8*2/8-9/3+5");
-	cout << d;
+	double d = bigOperationSolving("(1.2 + 3.4 - 5.6)/(2.1*3.2 + 4.6) -12.1*3.1 + (1.2 + 5.2)^(4/(3.2+5.6))");
+	cout << d<<endl;
 	return 0;
 }
