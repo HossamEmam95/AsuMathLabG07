@@ -9,7 +9,8 @@
 #include "cmath"
 using namespace std;
 double operationSolving(string s){
-
+//this method calculate operation represnted by string argument 
+// the function perform power operation then mul & division then add & sub
 	double result;
 	int op_counter = 0;
 
@@ -55,7 +56,7 @@ double operationSolving(string s){
 
 	for(int i =0;i<op_counter;i++){
 		if(operations[i] == '*'){
-			numbers[i] = numbers[i]*numbers[i+1];cout<<'*' <<numbers[i]<<endl;
+			numbers[i] = numbers[i]*numbers[i+1];
 			for(int j = i;j<op_counter-1;j++){
 				numbers[j+1] = numbers[j+2];
 				operations[j] = operations[j+1];
@@ -64,7 +65,7 @@ double operationSolving(string s){
 			i--;
 		}
 		if(operations[i] == '/'){
-			numbers[i] = numbers[i]/numbers[i+1];cout <<'/'<<numbers[i]<<endl;
+			numbers[i] = numbers[i]/numbers[i+1];
 			for(int j = i;j<op_counter-1;j++){
 				numbers[j+1] = numbers[j+2];
 				operations[j] = operations[j+1];
@@ -85,7 +86,7 @@ double operationSolving(string s){
 
 	for(int i =0;i<op_counter;i++){
 		if(operations[i] == '+'){
-			numbers[i] = numbers[i]+numbers[i+1];cout<<'+' <<numbers[i]<<endl;
+			numbers[i] = numbers[i]+numbers[i+1];
 			for(int j = i;j<op_counter-1;j++){
 				numbers[j+1] = numbers[j+2];
 				operations[j] = operations[j+1];
@@ -94,7 +95,7 @@ double operationSolving(string s){
 			i--;
 		}
 		if(operations[i] == '-'){
-			numbers[i] = numbers[i]-numbers[i+1];cout<<'-' <<numbers[i]<<endl;
+			numbers[i] = numbers[i]-numbers[i+1];
 			for(int j = i;j<op_counter-1;j++){
 				numbers[j+1] = numbers[j+2];
 				operations[j] = operations[j+1];
