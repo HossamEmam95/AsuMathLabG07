@@ -38,6 +38,11 @@ Extra function will be added soon
 
 **How to configure**
 
+Where compiled file is Matrix , Operation file is big matrix.
+
+`    make    
+     ./matrix big.matrix    `
+
 **Examples :**
 
 Example 1 
