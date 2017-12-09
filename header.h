@@ -136,6 +136,6 @@ Matrix inverse();
 void swapRows(int r1, int r2);
 Matrix createIdentity(int size);
 Matrix getTranspose();
-
+Matrix operator^(int power);
 
 };
