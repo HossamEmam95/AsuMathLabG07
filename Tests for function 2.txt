@@ -6,7 +6,7 @@ Function 2:
 		2- Ordering operations is supported.ex:4+3/3=5
 		3- operations between () are done firstly (the function supports nested () by recursion).ex:((6+2)*3)+4=28 
 	 	4- {sin ,cos , tan ,sqrt } can contain operations .
-		5-It can deal with - sign after any operation.ex:4*-3=12
+		5-It can deal with - sign after any operation.ex:4*-3=-12
 	-hazards:
 		1-Operations mustn't contain any space.
 			>> (4 + 5*10 /sin(3)) this is wrong as it contains spaces.
