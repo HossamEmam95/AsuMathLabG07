@@ -1,0 +1,32 @@
+Function 2:
+	-calling : checkOperations(string).
+	-return : string of matrix with solved operations.  
+	-features : 
+		1- supported  operations are { + , - , * , ^ , % ,  / , sin , cos ,tan , sqrt} .
+		2- Ordering operations is supported.ex:4+3/3=5
+		3- operations between () are done firstly (the function supports nested () by recursion).ex:((6+2)*3)+4=28 
+	 	4- {sin ,cos , tan ,sqrt } can contain operations .
+		5-It can deal with - sign after any operation.ex:4*-3=12
+	-hazards:
+		1-Operations mustn't contain any space.
+			>> (4 + 5*10 /sin(3)) this is wrong as it contains spaces.
+			>> (4+5*10/sin(3)) this one has no hazards.
+		2-Don't pass asting contains matrix of matrices.
+			>>[[2 7;5 1] [10 0;7 4]] this isn't supported.
+			>> the function can deal just with simple matrix of operations and simple elements.
+	-helper functions:
+		1-operationSolving(string s):
+			>>passed string is a simple operation {+ , - , * , ^ , % ,  / }.
+			>>return value is this operation result as double.
+		2-bigOperationSolving(string s):
+			>>passed string is avery complex operation.
+			>>detect the operations between () and calls function operationSolving to solve it.
+			>>perform { sin , cos ,tan , sqrt} operations
+			>>return value is the result  as double type
+	-examples: 
+		>> double op = bigOperationSolving("(1.2 + 3.4 - 5.6)/(2.1*3.2 + 4.6) -12.1*3.1 + (1.2 + 5.2)^(4/(3.2+5.6))");
+			op =  -35.273
+		>> double op = bigOperationSolving("sin(14/2)+tan(5)");
+			op= -2.7235
+		>> string mat = checkOperations("[1.2 2.3 5.0 3.4;1.3 2.4 3.2 2.1;4.6 1.3 7.8 12.6;1.2^3 3+1.2 15/(2) (1.2+3.4-5.6)/(2.1*3.2+4.6)-12.1*3.1+(1.2+5.2)^(4/(3.2+5.6))]");
+			mat = "[1.200000 2.300000 5.000000 3.400000;1.300000 2.400000 3.200000 2.100000;4.600000 1.300000 7.800000 12.600000;1.728000 4.200000 7.500000 -35.273221]"
