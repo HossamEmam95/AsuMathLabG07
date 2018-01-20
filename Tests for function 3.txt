@@ -1,0 +1,24 @@
+Function 3:
+	-calling : concat(string).
+	-return :   string of matrix after concatenation.
+	-features : 
+		1- concatenate two send matrices between them separator {, or space or ;}.
+		2- if the separator is {, or space} horizontal concat. is done using addcolumn method.
+		3- if the separator is {;} vertical concat. is done using addrow method.
+	-hazards:
+		1- the passed string is just two matrices between the one separator {, or space or ;}.
+		2- every matrix should be simple matrix (i.e no matices inside matrix).
+		3- @horizontal concat. make sure that:
+			 matrix1.num_rows = matrix2.num_rows.
+		4-@horizontal concat. make sure that:
+			 matrix1.num_col = matrix2.num_col.
+	-examples: 
+		>> string str = concat("[1.2000 2.3000 5.0000;1.3000 2.4000 3.2000;4.6000 1.3000 7.8000] [3.4;2.1;12.6]");
+			str ="[1.200000 2.300000 5.000000 3.400000;1.300000 2.400000 3.200000 2.100000;4.600000 1.300000 7.800000 12.600000]"
+
+		>>>> string str = concat("[1.2000 2.3000 5.0000;1.3000 2.4000 3.2000;4.6000 1.3000 7.8000],[3.4;2.1;12.6]");
+			str ="[1.200000 2.300000 5.000000 3.400000;1.300000 2.400000 3.200000 2.100000;4.600000 1.300000 7.800000 12.600000]"
+
+		>> string str = concat("[1.2000 2.3000 5.0000;1.3000 2.4000 3.2000;4.6000 1.3000 7.8000];[3.4 2.1 12.6]");
+			str ="[1.200000 2.300000 5.000000;1.300000 2.400000 3.200000;4.600000 1.300000 7.800000;3.400000 2.100000 12.600000]"
+		
