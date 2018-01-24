@@ -27,6 +27,21 @@ void print(Matrix m )
 	  }
 	}
 
+
+
+// finstion that get an array of strings and concatenat them together to produce one string seprated by the given char
+string str_conc(string array[],int size, char separator)
+{
+	string output_string;
+	for(int i=0; i<size; i++)
+	{
+		output_string = output_string + array[i] + separator;
+	}
+
+	return output_string;
+}
+
+
 bool lineTest(string s) //function returns true if line, false if operation
 
 {
