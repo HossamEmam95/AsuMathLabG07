@@ -4,16 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
-#include<curses.h>
-#include <ncurses.h>
+//#include<curses.h>
+//#include <ncurses.h>
 #include <algorithm>
 #include<fstream>
 #include <climits>
 #include "header.h"
 #include "cmath"
 #include "ctime";
-
-
 using namespace std;
 
 
@@ -43,13 +41,50 @@ bool lineTest(string s) //function returns true if line, false if operation
 	return index;
 }
 
+int stringopenclosed(string s)
+{
+	int counteropen=0;
+	int counterclosed=0;
+	int found1;
+	int found2;
+	if(s.find('[')!=string::npos)
+	{found1=s.find('[');
+    counteropen++;}
+
+
+	while(s.find('[',found1+1)!=string::npos )
+	{
+		if(s.find('[',found1+1)!=string::npos)
+		{found1=s.find('[',found1+1);
+	counteropen++;}
+}
+	if(s.find(']')!=string::npos)
+	{found2=s.find(']');
+	counterclosed++;
+}
+	while(s.find(']',found2+1)!=string::npos )
+	{
+		if(s.find(']',found2+1)!=string::npos)
+		{found2=s.find(']',found2+1);
+	counterclosed++;}
+	}
+
+	if(counteropen>counterclosed)
+	return 1;
+	else
+	return 0;
+}
+
 string* inputfile(string s,int &nlines) //function returns lines from file (s) on array of strings
 {
 	std::ifstream infile;
 	infile.open(s.c_str());
 	string line;
 	int i = 0;
+	int intchecker=0;
 	string *lines = new string[1000];
+	int awel_line_fel_loop=0;
+	string checker="";
 	if (infile.bad())
 	{
 		cout << "Error!" << endl;
@@ -58,31 +93,79 @@ int linebegin=0;
 int done =0;
 	while (getline(infile, line))
 	{
+
+		int x=line.length();
+		if(line.find(';',(x-2))==string::npos)
+		line.replace(x-1,2,";/0");
+		else
+		line.replace(x-1,1,"/0");
+		if(awel_line_fel_loop==0)
+		checker=line;
+		else
+		checker=lines[i]+line;
+		awel_line_fel_loop=1;
+		intchecker= stringopenclosed(checker);
+		//cout<<line<<endl;
     //breaked=0;
 		if (line.length() > 2)
 		{
-     if((line.find('[')!=string::npos) && done==0)
+     if((line.find('[')!=string::npos) && done==0 && intchecker==1 && linebegin==0)
        {linebegin=1;
         lines[i]=line;
-        if(line.find(']')!=string::npos)
-      { i++;
-        linebegin=0;}
-        done=1;
-       }
-    if((linebegin==1) &&line.find(']')==string::npos  && (done==0))
-			{lines[i]=lines[i]+line;
+				// int r=line.find(';');
+				// int l=line.length();
+				// cout<<r<<endl<<l<<endl;
+				// if(line.find(';',line.length()-3)<0)
+				// line=line+";/0";
+				//cout<<"ana_get"<<endl;
+      //   if(line.find(']')!=string::npos)
+      // { i++;
+      //   linebegin=0;}
+      done=1;
+      }
+    if((linebegin==1)  && (done==0) && intchecker==1)
+			{
+
+
+
+
+				lines[i]=lines[i]+line;
+				//cout<<lines[i]<<endl;
         done=1;
       }
-    if((line.find(']')!=string::npos) && (linebegin==1)&& (done==0))
+    if((line.find(']')!=string::npos) && (linebegin==1)&& (done==0) && intchecker==0)
 			{
-      lines[i]=lines[i]+line;
+    //  lines[i]=lines[i]+line;
+		// cout<<line<<endl;
+		// s2=line+str;
+
+		 //cout<<lines[i]<<endl;
+		 //cout<<line<<endl;
+		//  if(line.find(';',line.length()-3)<0)
+ 	// 	line=line+";/0";
+		 lines[i]=lines[i]+line;
+		//lines[i]=lines[i]+str;
+		//cout<<lines[i]<<endl;
+
+		// cout<<s2<<endl;
       i++;
       linebegin=0;
       done=1;
       }
+			if((line.find('[')!=string::npos) && done==0 && intchecker==0 && linebegin==0)
+        {
+
+					lines[i]=line;
+					i++;
+					linebegin=0;
+					done=1;
+				}
       if((linebegin==0) && done==0)
       {
         lines[i]=line;
+				if(line.find(';')!=string::npos)
+				lines[i].erase(line.find(';'));
+
         i++;
         done=1;
            //breaked=1;
@@ -93,8 +176,29 @@ int done =0;
 		}
 	done=0;
 }
-	nlines = i;
 
+
+int found;
+	nlines = i;
+	for(int j=0;j<i;j++)
+	{
+		if(lines[j].find("/0")!=string::npos)
+		{
+			found=lines[j].find("/0");
+			lines[j].erase(found,2);
+		}
+			while(lines[j].find("/0",found+1)!=string::npos)
+			{
+				if(lines[j].find("/0",found+1)!=string::npos)
+				{
+					found=lines[j].find("/0",found+1);
+					lines[j].erase(found,2);
+				}
+		}
+	}
+// cout<<lines[0]<<endl;
+// cout<<lines[1]<<endl;
+// cout<<lines[2]<<endl;
 	infile.close();
 
 	return lines;
@@ -257,6 +361,54 @@ Matrix Power(Matrix m,int power){
 	}
 	return n;
 }
+Matrix Rand(int n,int m){
+	Matrix temp(n,m,3);
+	return temp;
+}
+
+Matrix Eye(int n,int m){
+	Matrix temp(n,m,2);
+	return temp;
+}
+
+Matrix Zero(int n,int m){
+	Matrix temp(n,m,0);
+	return temp;
+}
+
+Matrix One(int n,int m){
+	Matrix temp(n,m,1);
+	return temp;
+}
+
+
+Matrix Sin(Matrix m){
+	for(int i =0;i <m.num_rows;i++){
+		for(int j =0;j <m.num_col;j++){
+			m.values[i][j] = sin(m.values[i][j]);
+		}
+	}
+	return m;
+}
+
+Matrix Sqrt(Matrix m){
+	for(int i =0;i <m.num_rows;i++){
+		for(int j =0;j <m.num_col;j++){
+			m.values[i][j] = sqrt(m.values[i][j]);
+		}
+	}
+	return m;
+}
+
+Matrix Power(Matrix m,int power){
+	Matrix n = m;
+	for(int i =1;i <power;i++){
+		n *= m;
+
+	}
+	return n;
+}
+
 
 
 int main(int argc, char*argv[])
@@ -270,16 +422,19 @@ int main(int argc, char*argv[])
 	//
   // print(A/B);
 
-
+//
 Matrix matrices[100];
 int ptr = 0;
 string *inputFileLines = new string[100]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
 
 	int nLines; //number Of lines
-
-	if (argc > 1)
+//
+if (argc > 1)
+//
 	{
+//
 		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
+//
 		for (int i = 0; i < nLines; i++)
 		{
 
