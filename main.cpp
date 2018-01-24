@@ -4,15 +4,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
-//#include<curses.h>
-//#include <ncurses.h>
+#include<curses.h>
+#include <ncurses.h>
 #include <algorithm>
 #include<fstream>
 #include <climits>
 #include "header.h"
 #include "cmath"
 #include "ctime";
+
+
 using namespace std;
+
+
 void print(Matrix m )
 	{
 	  for(int i=0; i<m.num_rows; i++)
@@ -87,9 +91,6 @@ int done =0;
 /*   if(breaked==1)
    break;*/
 		}
-//cout<<i<<endl;
-//for(int j=0;j<2;j++)
-//cout<<lines[i]<<endl;
 	done=0;
 }
 	nlines = i;
@@ -97,43 +98,25 @@ int done =0;
 	infile.close();
 
 	return lines;
-
 }
 
 void getMatrixDimension(string s, int &nR, int &nC) //Function gets num_colums,num_rows
-
 {
-
 		nR = 1;
-
 		int nSpaces = 1;
-
 		nC = 1;
-
 		for (int i = s.find('['); i < s.length()-1; i++)
-
 		{
-
 			if (s[i] == ';')
-
 			{
-
 				nR++;
-
 			}
-
 			if (s[i] == ' ')
-
 			{
-
 				nSpaces++;
-
 			}
-
 		}
-
 		nC = nSpaces / nR;
-
 }
 
 void stringParsing(string s, string &m, char *Name) //function returns array of double values, name of the matrices
@@ -154,12 +137,12 @@ void stringParsing(string s, string &m, char *Name) //function returns array of 
 		num++;
 		tokeName = strtok(NULL, spearators);
 	}
-
 }
 
-void operationParsing(string s, char& in1, char& in2, char& out, char& operation) //function parses operation line to in1,in2,out,operation
 
-{ int location=0;
+void operationParsing(string s, char& in1, char& in2, char& out, char& operation) //function parses operation line to in1,in2,out,operation
+{
+	int location=0;
 	int nLoop = 0;
   int noOpcode = 0;
 	for (int i = 0; i < s.length(); i++)
@@ -214,30 +197,20 @@ void operationParsing(string s, char& in1, char& in2, char& out, char& operation
 }
 
 int testMultiVariables(string s) //tests if there is multiVariable in the same line and returns their number
-
 {
-
 	int numofequals = 0;
-
 	for (int i = 0; i < s.length(); i++)
-
 	{
-
 		int ASCII = (int)s[i];
-
 		if (ASCII == 61)
-
 		{
-
 			numofequals++;
-
 		}
-
 	}
 
 	return numofequals;
-
 }
+
 Matrix Rand(int n,int m){
 	Matrix temp(n,m,3);
 	return temp;
@@ -257,7 +230,6 @@ Matrix One(int n,int m){
 	Matrix temp(n,m,1);
 	return temp;
 }
-
 
 Matrix Sin(Matrix m){
 	for(int i =0;i <m.num_rows;i++){
@@ -281,576 +253,552 @@ Matrix Power(Matrix m,int power){
 	Matrix n = m;
 	for(int i =1;i <power;i++){
 		n *= m;
-		
+
 	}
 	return n;
 }
 
 
-
 int main(int argc, char*argv[])
 {
 
-  string strA = "[8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9]";
-  string strB = "[1.2 3.4 5.6 7.8 1.0 3.2 2.1 2.3 1.4 2.6 2.7 2.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 3.7 1.2 3.4 5.6 7.8 9.0 1.2 2.1 2.3 2.4 1.6; 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4; 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 7.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 4.1 2.3; 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 1.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1; 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2; 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 17.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0; 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8; 9.0 2.2 2.1 2.3 2.4 1.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 2.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6; 7.4 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4; 5.6 7.8 9.0 2.2 4.4 2.3 2.4 2.6 2.7 1.2 3.4 5.6 2.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2; 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 1.8 9.0 1.2 2.1 2.3 2.4 8.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7; 1.2 3.4 5.6 7.8 9.0 2.2 5.1 4.3 12.4 2.6 2.7 1.2 3.4 5.6 97.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 3.4 2.6; 2.7 1.2 3.4 5.6 7.5 9.0 2.2 2.1 3.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 5.1 2.3 2.4 5.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4; 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 8.2 2.1 2.3; 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 6.6 2.7 1.2 3.4 5.6 2.8 9.0 1.2 2.1; 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 5.1 2.3 2.4 0.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 0.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2; 0.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0; 4.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 5.2 2.1 2.3 2.4 9.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8; 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 5.3 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.3; 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 3.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 3.4 2.6 3.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 8.4 2.6 2.7 1.2 3.4; 5.6 7.8 9.0 2.2 2.1 2.3 3.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 1.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2; 3.4 1.6 7.8 9.0 2.2 3.1 6.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7; 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 4.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 1.6; 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 1.4 2.6 2.7 1.2 3.4 9.6 7.8 9.0 2.2 2.1 2.3 2.4; 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 1.4 2.6 2.7 2.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3; 2.4 2.6 2.7 1.2 3.4 5.6 7.8 1.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 8.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 2.6 7.8 9.0 2.2 2.1; 7.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 3.6 1.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2; 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 7.2 3.4 5.6 7.8 9.0; 2.2 2.1 2.3 2.4 2.6 7.7 9.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.9 2.4 2.6 2.7 1.2 3.4 5.6 7.8; 9.0 2.2 2.1 2.3 2.4 2.6 7.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6; 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4; 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 5.7 9.3 3.4 5.6 3.8 9.0 2.2 5.1 2.3 2.4 2.6 2.7 1.2]" ;
+  // string strA = "[8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9; 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9 8.9 7.3 4.8 2.4 2.3 6.5 8.9 1.2 4.9 3.8 7.2 7.5 9.8 3.4 7.5 8.9]";
+  // string strB = "[1.2 3.4 5.6 7.8 1.0 3.2 2.1 2.3 1.4 2.6 2.7 2.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 3.7 1.2 3.4 5.6 7.8 9.0 1.2 2.1 2.3 2.4 1.6; 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4; 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 7.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 4.1 2.3; 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 1.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1; 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2; 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 17.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0; 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8; 9.0 2.2 2.1 2.3 2.4 1.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 2.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6; 7.4 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4; 5.6 7.8 9.0 2.2 4.4 2.3 2.4 2.6 2.7 1.2 3.4 5.6 2.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2; 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 1.8 9.0 1.2 2.1 2.3 2.4 8.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7; 1.2 3.4 5.6 7.8 9.0 2.2 5.1 4.3 12.4 2.6 2.7 1.2 3.4 5.6 97.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 3.4 2.6; 2.7 1.2 3.4 5.6 7.5 9.0 2.2 2.1 3.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 5.1 2.3 2.4 5.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4; 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 8.2 2.1 2.3; 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 6.6 2.7 1.2 3.4 5.6 2.8 9.0 1.2 2.1; 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 5.1 2.3 2.4 0.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 0.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2; 0.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0; 4.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 5.2 2.1 2.3 2.4 9.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8; 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 5.3 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.3; 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 3.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 3.4 2.6 3.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 8.4 2.6 2.7 1.2 3.4; 5.6 7.8 9.0 2.2 2.1 2.3 3.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 1.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2; 3.4 1.6 7.8 9.0 2.2 3.1 6.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7; 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 4.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 1.6; 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 1.4 2.6 2.7 1.2 3.4 9.6 7.8 9.0 2.2 2.1 2.3 2.4; 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 1.4 2.6 2.7 2.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3; 2.4 2.6 2.7 1.2 3.4 5.6 7.8 1.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 8.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 2.6 7.8 9.0 2.2 2.1; 7.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 3.6 1.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2; 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 7.2 3.4 5.6 7.8 9.0; 2.2 2.1 2.3 2.4 2.6 7.7 9.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.9 2.4 2.6 2.7 1.2 3.4 5.6 7.8; 9.0 2.2 2.1 2.3 2.4 2.6 7.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6; 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4; 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 2.7 1.2 3.4 5.6 7.8 9.0 2.2 2.1 2.3 2.4 2.6 5.7 9.3 3.4 5.6 3.8 9.0 2.2 5.1 2.3 2.4 2.6 2.7 1.2]" ;
+	//
+  // Matrix A(strA);
+  // Matrix B(strB);
+	//
+  // print(A/B);
 
-  Matrix A(strA);
-  Matrix B(strB);
 
-  print(A/B);
-  
-//
-// Matrix matrices[100];
-// int ptr = 0;
-// string *inputFileLines = new string[100]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
-//
-// 	int nLines; //number Of lines
-//
-// 	if (argc > 1)
-//
-// 	{
-//
-// 		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
-//
-// 		for (int i = 0; i < nLines; i++)
-//
-// 		{
-//
-// 			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
-//
-// 			int multiVariable = 0;
-//
-// 			multiVariable = testMultiVariables(inputFileLines[i]); //function tests if there multi variable in the same line and returns number of the variables
-//
-// 			if (lineType)
-//
-// 			{
-// 				char *name = new char[multiVariable];
-//
-// 				string m = "";
-//
-// 				stringParsing(inputFileLines[i], m, name); //function returns array of double values, name of the matrix
-//
-// 				for (int j = 0; j < multiVariable; j++)
-//
-// 				{
-//
-// 					//////////////////////////	//Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
-//           Matrix w(m);
-//           matrices[ptr] = w;
-//           matrices[ptr].name = name[j];
-//           ptr++;
-// 				}
-//
-// 				if (inputFileLines[i].find(';') < inputFileLines[i].find(']'))
-//
-// 				{
-//
-// 					//////////////////////////////////////Get deteriment and print it
-//           for (int i = 0; i<multiVariable; i++)
-//           {
-//             cout<<name[i]<<" = "<<endl;
-//             print(matrices[ptr-1]);
-//           }
-// 				}
-//
-// 			}
-//
-// 			else
-//
-// 			{
-//
-//   				char in1, in2, out, operation;
-// 				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-//
-//         switch (operation)
-//
-// 				{
-//
-//
-//           				case '+':
-//                   {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-//                   string zero = "[]";
-//                   Matrix first;
-//                   Matrix second;
-//                   Matrix output;
-//                   output.name = out;
-//                   matrices[ptr] = output;
-//                   ptr++;
-//
-//
-//                   for (int i = 0; i < ptr; i++)
-//                   {
-//                     if (matrices[i].name == in1) {first = matrices[i];}
-//                     if (matrices[i].name == in2) second = matrices[i];
-//                     if (matrices[i].name == out)
-//                     {output = first + second;
-//                      matrices[i] = output;
-//
-//                       }
-//                   }
-//
-//                     cout<<out<<" = "<<endl;
-//                   //  cout<<matrices[ptr-1].name;
-//                     print( matrices[ptr-1] );
-//                     matrices[ptr-1].name=out;
-//
-//
-//
-//
-//                       break;}
-//
-//
-//
-//
-//           				case '-':
-//
-//           			{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-//                 string zero = "[]";
-//                 Matrix first;
-//                 Matrix second;
-//                 Matrix output;
-//                 output.name = out;
-//                 matrices[ptr] = output;
-//                 ptr++;
-//
-//
-//                 for (int i = 0; i < ptr; i++)
-//                 {
-//                   if (matrices[i].name == in1) {first = matrices[i];}
-//                   if (matrices[i].name == in2) second = matrices[i];
-//                   if (matrices[i].name == out)
-//                   {output = first - second;
-//                    matrices[i] = output;
-//
-//                     }
-//                 }
-//
-//                   cout<<out<<" = "<<endl;
-//                 //  cout<<matrices[ptr-1].name;
-//                   print( matrices[ptr-1] );
-//                   matrices[ptr-1].name=out;
-//
-//
-//
-//
-//           					break;}
-//
-//           				case '*':
-//
-//           			/////////////////////////////put mulitplication function from matrix
-//                 {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-//                 string zero = "[]";
-//                 Matrix first;
-//                 Matrix second;
-//                 Matrix output;
-//                 output.name = out;
-//                 matrices[ptr] = output;
-//                 ptr++;
-//
-//
-//                 for (int i = 0; i < ptr; i++)
-//                 {
-//
-//                   if (matrices[i].name == in1) {first = matrices[i];}
-//                   if (matrices[i].name == in2) second = matrices[i];
-//                   if (matrices[i].name == out)
-//                   {output = first * second;
-//                    matrices[i] = output;
-//
-//                     }
-//                 }
-//
-//                   cout<<out<<" = "<<endl;
-//                 //  cout<<matrices[ptr-1].name;
-//                   print( matrices[ptr-1] );
-//                   matrices[ptr-1].name=out;
-//
-//
-//
-//
-//                     break;}
-//
-//
-//
-//           				case '/':
-//                   {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-//                   string zero = "[]";
-//                   Matrix first;
-//                   Matrix second;
-//                   Matrix output;
-//                   output.name = out;
-//                   matrices[ptr] = output;
-//                   ptr++;
-//
-//
-//                   for (int i = 0; i < ptr; i++)
-//                   {
-//                     if (matrices[i].name == in1) {first = matrices[i];}
-//                     if (matrices[i].name == in2) second = matrices[i];
-//                     if (matrices[i].name == out)
-//                     {output = first / second;
-//                      matrices[i] = output;
-//
-//                       }
-//                   }
-//
-//                     cout<<out<<" = "<<endl;
-//                   //  cout<<matrices[ptr-1].name;
-//                     print( matrices[ptr-1] );
-//                     matrices[ptr-1].name=out;
-//
-//
-//
-//
-//                       break;}
-//           			////////////////////////////put division function
-//
-//
-//
-//           				case '1':
-//               {  string zero = "[]";
-//                   Matrix first;
-//                   Matrix second;
-//                   Matrix output;
-//                   output.name = out;
-//                   matrices[ptr] = output;
-//                   ptr++;
-//
-//
-//                   for (int i = 0; i < ptr; i++)
-//                   {
-//                     if (matrices[i].name == in1) {first = matrices[i];}
-//                     if (matrices[i].name == in2) second = matrices[i];
-//                     if (matrices[i].name == out)
-//                     {output =first.getTranspose();
-//                      matrices[i] = output;
-//
-//                       }
-//                   }
-//
-//                     cout<<out<<" = "<<endl;
-//                   //  cout<<matrices[ptr-1].name;
-//                     print( matrices[ptr-1] );
-//                     matrices[ptr-1].name=out;
-//
-//                   break;}
-//
-//
-//
-//
-//           				case'.':
-//                   {
-//                                  int num = (int)in1 - 48;
-//
-//
-//
-//                     /////////////////////////put division function tht divide num/matrix in2  = matrix out
-//                     string zero = "[]";
-//                     Matrix first(zero);
-//                     Matrix output(zero);
-//                     output.name = out;
-//                     matrices[ptr] = output;
-//                     ptr++;
-//                     for (int i = 0; i < ptr; i++)
-//                     {
-//                       if (matrices[i].name == in2) {first = matrices[i];}
-//                     }
-//                     output = first;
-//                       for(int r = 0; r<first.num_rows; r++ )
-//                       {
-//                           for(int c = 0; c<first.num_col; c++)
-//                           {
-//                             output.values[r][c] = num/first.values[r][c];
-//                           }
-//                       }
-//                       matrices[ptr-1]=output;
-//                       cout<<out<<" = "<<endl;
-//                       print(output);
-//
-//
-//                     break;}
-//
-// 				}
-//
-// 			}
-//
-// 		}
-//
-// 	}
-//
-// 	if (argc <= 1)
-//
-// 	{
-//
-// 		string line;
-//
-// 		while (getline(cin, line))
-//
-// 		{
-//
-// 			int multiVariable = 0;
-//
-// 			multiVariable = testMultiVariables(line); //function tests if there multi variable in the same line and returns number of the variables
-//
-// 			cout << ">";
-//
-// 			bool lineType = lineTest(line);
-//
-// 			if (lineType)
-//
-// 			{
-//
-// 				int nR, nC;
-//
-// 				char *name = new char[multiVariable];
-//
-// 				getMatrixDimension(line, nR, nC); //Function gets num_colums,num_row
-//
-// 				string m = ""; //array of values
-//
-// 				stringParsing(line, m, name); //function returns array of double values, name of the matrix
-//
-//
-// 				for (int j = 0; j < multiVariable; j++)
-//
-// 				{
-//
-// 					///Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",value
-//           Matrix w(m);
-//           matrices[ptr] = w;
-//           matrices[ptr].name = name[j];
-//           ptr++;
-//
-//
-// 				}
-//
-// 				if (line.rfind(';') < line.rfind(']'))
-//
-// 				{
-//
-// 					//////////////////////////////////////Get deteriment and print it
-//           for (int i = 0; i<multiVariable; i++)
-//           {
-//             cout<<name[i]<<" = "<<endl;
-//             print(matrices[ptr-1]);
-//           }
-// 				}
-//
-// 			}
-//
-// 			else
-//
-// 			{
-//
-// 				char in1, in2, out, operation;
-//
-// 				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-// 				switch (operation)
-//
-// 				{
-//           case '+':{
-//             ////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
-//               string zero = "[]";
-//               Matrix first;
-//               Matrix second;
-//               Matrix output;
-//               output.name = out;
-//               matrices[ptr] = output;
-//               ptr++;
-//
-//
-//               for (int i = 0; i < ptr; i++)
-//               {
-//                 if (matrices[i].name == in1) {first = matrices[i];}
-//                 if (matrices[i].name == in2) second = matrices[i];
-//                 if (matrices[i].name == out)
-//                 {output = first + second;
-//                  matrices[i] = output;
-//
-//                   }
-//               }
-//
-//                 cout<<out<<" = ";
-//               //  cout<<matrices[ptr-1].name;
-//                 print( matrices[ptr-1] );
-//                 matrices[ptr-1].name=out;
-//
-//
-//
-//
-//             break;}
-//
-//           case '-':{
-//
-//             string zero = "[]";
-//             Matrix first;
-//             Matrix second;
-//             Matrix output;
-//             output.name = out;
-//             matrices[ptr] = output;
-//             ptr++;
-//
-//
-//             for (int i = 0; i < ptr; i++)
-//             {
-//               if (matrices[i].name == in1) {first = matrices[i];}
-//               if (matrices[i].name == in2) second = matrices[i];
-//               if (matrices[i].name == out)
-//               {output = first - second;
-//                matrices[i] = output;
-//
-//                 }
-//             }
-//
-//               cout<<out<<" = ";
-//             //  cout<<matrices[ptr-1].name;
-//               print( matrices[ptr-1] );
-//               matrices[ptr-1].name=out;
-//
-//
-//             break;}
-//
-//           case '*':{
-//             string zero = "[]";
-//             Matrix first;
-//             Matrix second;
-//             Matrix output;
-//             output.name = out;
-//             matrices[ptr] = output;
-//             ptr++;
-//
-//
-//             for (int i = 0; i < ptr; i++)
-//             {
-//               if (matrices[i].name == in1) {first = matrices[i];}
-//               if (matrices[i].name == in2) second = matrices[i];
-//               if (matrices[i].name == out)
-//               {output = first * second;
-//                matrices[i] = output;
-//
-//                 }
-//             }
-//
-//               cout<<out<<" = ";
-//             //  cout<<matrices[ptr-1].name;
-//               print( matrices[ptr-1] );
-//               matrices[ptr-1].name=out;
-//
-//
-//
-//
-//           break;
-//         }
-//
-//           case '/':{
-//
-//             string zero = "[]";
-//             Matrix first;
-//             Matrix second;
-//             Matrix output;
-//             output.name = out;
-//             matrices[ptr] = output;
-//             ptr++;
-//
-//
-//             for (int i = 0; i < ptr; i++)
-//             {
-//               if (matrices[i].name == in1) {first = matrices[i];}
-//               if (matrices[i].name == in2) second = matrices[i];
-//               if (matrices[i].name == out)
-//               {output = first / second;
-//                matrices[i] = output;
-//
-//                 }
-//             }
-//
-//               cout<<out<<" = ";
-//             //  cout<<matrices[ptr-1].name;
-//               print( matrices[ptr-1] );
-//               matrices[ptr-1].name=out;
-//
-//
-//
-//
-//
-//             break;}
-//
-//           case '1':{
-//             string zero = "[]";
-//             Matrix first;
-//             Matrix second;
-//             Matrix output;
-//             output.name = out;
-//             matrices[ptr] = output;
-//             ptr++;
-//
-//
-//             for (int i = 0; i < ptr; i++)
-//             {
-//               if (matrices[i].name == in1) {first = matrices[i];}
-//               if (matrices[i].name == in2) second = matrices[i];
-//               if (matrices[i].name == out)
-//               {output =first.getTranspose();
-//                matrices[i] = output;
-//
-//                 }
-//             }
-//
-//               cout<<out<<" = ";
-//             //  cout<<matrices[ptr-1].name;
-//               print( matrices[ptr-1] );
-//               matrices[ptr-1].name=out;
-//
-//
-//
-//
-//
-//
-//
-//             break;}
-//
-//           case'.':{
-//
-//             int num = (int)in1 - 48;
-//
-//
-//
-//             /////////////////////////put division function tht divide num/matrix in2  = matrix out
-//             string zero = "[]";
-//             Matrix first(zero);
-//             Matrix output(zero);
-//             output.name = out;
-//             matrices[ptr] = output;
-//             ptr++;
-//             for (int i = 0; i < ptr; i++)
-//             {
-//               if (matrices[i].name == in2) {first = matrices[i];}
-//             }
-//             output = first;
-//               for(int r = 0; r<first.num_rows; r++ )
-//               {
-//                   for(int c = 0; c<first.num_col; c++)
-//                   {
-//                     output.values[r][c] = num/first.values[r][c];
-//                   }
-//               }
-//               matrices[ptr-1]=output;
-//               cout<<out<<" = "<<endl;
-//               print(output);
-//
-//
-//             break;}
-//
-//
-// 				}
-//
-// 			}
-//
-// 		}
-//
-// 	}
-//
+Matrix matrices[100];
+int ptr = 0;
+string *inputFileLines = new string[100]; //Array Of lines, """""""""""try to convert to dynamic""""""""""
+
+	int nLines; //number Of lines
+
+	if (argc > 1)
+	{
+		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
+		for (int i = 0; i < nLines; i++)
+		{
+
+			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
+
+			int multiVariable = 0;
+
+			multiVariable = testMultiVariables(inputFileLines[i]); //function tests if there multi variable in the same line and returns number of the variables
+
+			if (lineType)
+
+			{
+				char *name = new char[multiVariable];
+
+				string m = "";
+
+				stringParsing(inputFileLines[i], m, name); //function returns array of double values, name of the matrix
+
+				for (int j = 0; j < multiVariable; j++)
+
+				{
+
+					//////////////////////////	//Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
+          Matrix w(m);
+          matrices[ptr] = w;
+          matrices[ptr].name = name[j];
+          ptr++;
+				}
+
+				if (inputFileLines[i].find(';') < inputFileLines[i].find(']'))
+
+				{
+
+					//////////////////////////////////////Get deteriment and print it
+          for (int i = 0; i<multiVariable; i++)
+          {
+            cout<<name[i]<<" = "<<endl;
+            print(matrices[ptr-1]);
+          }
+				}
+
+			}
+
+			else
+
+			{
+
+  				char in1, in2, out, operation;
+				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+
+        switch (operation)
+
+				{
+
+
+          				case '+':
+                  {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+                  string zero = "[]";
+                  Matrix first;
+                  Matrix second;
+                  Matrix output;
+                  output.name = out;
+                  matrices[ptr] = output;
+                  ptr++;
+
+
+                  for (int i = 0; i < ptr; i++)
+                  {
+                    if (matrices[i].name == in1) {first = matrices[i];}
+                    if (matrices[i].name == in2) second = matrices[i];
+                    if (matrices[i].name == out)
+                    {output = first + second;
+                     matrices[i] = output;
+
+                      }
+                  }
+
+                    cout<<out<<" = "<<endl;
+                  //  cout<<matrices[ptr-1].name;
+                    print( matrices[ptr-1] );
+                    matrices[ptr-1].name=out;
+
+                      break;}
+
+          				case '-':
+
+          			{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+                string zero = "[]";
+                Matrix first;
+                Matrix second;
+                Matrix output;
+                output.name = out;
+                matrices[ptr] = output;
+                ptr++;
+
+
+                for (int i = 0; i < ptr; i++)
+                {
+                  if (matrices[i].name == in1) {first = matrices[i];}
+                  if (matrices[i].name == in2) second = matrices[i];
+                  if (matrices[i].name == out)
+                  {output = first - second;
+                   matrices[i] = output;
+
+                    }
+                }
+
+                  cout<<out<<" = "<<endl;
+                //  cout<<matrices[ptr-1].name;
+                  print( matrices[ptr-1] );
+                  matrices[ptr-1].name=out;
+
+          					break;}
+
+          				case '*':
+
+          			/////////////////////////////put mulitplication function from matrix
+                {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+                string zero = "[]";
+                Matrix first;
+                Matrix second;
+                Matrix output;
+                output.name = out;
+                matrices[ptr] = output;
+                ptr++;
+
+
+                for (int i = 0; i < ptr; i++)
+                {
+
+                  if (matrices[i].name == in1) {first = matrices[i];}
+                  if (matrices[i].name == in2) second = matrices[i];
+                  if (matrices[i].name == out)
+                  {output = first * second;
+                   matrices[i] = output;
+
+                    }
+                }
+
+                  cout<<out<<" = "<<endl;
+                //  cout<<matrices[ptr-1].name;
+                  print( matrices[ptr-1] );
+                  matrices[ptr-1].name=out;
+
+                    break;}
+
+
+          				case '/':
+                  {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+                  string zero = "[]";
+                  Matrix first;
+                  Matrix second;
+                  Matrix output;
+                  output.name = out;
+                  matrices[ptr] = output;
+                  ptr++;
+
+
+                  for (int i = 0; i < ptr; i++)
+                  {
+                    if (matrices[i].name == in1) {first = matrices[i];}
+                    if (matrices[i].name == in2) second = matrices[i];
+                    if (matrices[i].name == out)
+                    {output = first / second;
+                     matrices[i] = output;
+
+                      }
+                  }
+
+                    cout<<out<<" = "<<endl;
+                  //  cout<<matrices[ptr-1].name;
+                    print( matrices[ptr-1] );
+                    matrices[ptr-1].name=out;
+
+                      break;}
+
+
+          				case '1':
+              {  string zero = "[]";
+                  Matrix first;
+                  Matrix second;
+                  Matrix output;
+                  output.name = out;
+                  matrices[ptr] = output;
+                  ptr++;
+
+
+                  for (int i = 0; i < ptr; i++)
+                  {
+                    if (matrices[i].name == in1) {first = matrices[i];}
+                    if (matrices[i].name == in2) second = matrices[i];
+                    if (matrices[i].name == out)
+                    {output =first.getTranspose();
+                     matrices[i] = output;
+
+                      }
+                  }
+
+                    cout<<out<<" = "<<endl;
+                  //  cout<<matrices[ptr-1].name;
+                    print( matrices[ptr-1] );
+                    matrices[ptr-1].name=out;
+
+                  break;}
+
+
+
+
+          				case'.':
+                  {
+                                 int num = (int)in1 - 48;
+
+
+
+                    /////////////////////////put division function tht divide num/matrix in2  = matrix out
+                    string zero = "[]";
+                    Matrix first(zero);
+                    Matrix output(zero);
+                    output.name = out;
+                    matrices[ptr] = output;
+                    ptr++;
+                    for (int i = 0; i < ptr; i++)
+                    {
+                      if (matrices[i].name == in2) {first = matrices[i];}
+                    }
+                    output = first;
+                      for(int r = 0; r<first.num_rows; r++ )
+                      {
+                          for(int c = 0; c<first.num_col; c++)
+                          {
+                            output.values[r][c] = num/first.values[r][c];
+                          }
+                      }
+                      matrices[ptr-1]=output;
+                      cout<<out<<" = "<<endl;
+                      print(output);
+
+
+                    break;}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if (argc <= 1)
+
+	{
+
+		string line;
+
+		while (getline(cin, line))
+
+		{
+
+			int multiVariable = 0;
+
+			multiVariable = testMultiVariables(line); //function tests if there multi variable in the same line and returns number of the variables
+
+			cout << ">";
+
+			bool lineType = lineTest(line);
+
+			if (lineType)
+
+			{
+
+				int nR, nC;
+
+				char *name = new char[multiVariable];
+
+				getMatrixDimension(line, nR, nC); //Function gets num_colums,num_row
+
+				string m = ""; //array of values
+
+				stringParsing(line, m, name); //function returns array of double values, name of the matrix
+
+
+				for (int j = 0; j < multiVariable; j++)
+
+				{
+
+					///Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",value
+          Matrix w(m);
+          matrices[ptr] = w;
+          matrices[ptr].name = name[j];
+          ptr++;
+
+
+				}
+
+				if (line.rfind(';') < line.rfind(']'))
+
+				{
+
+					//////////////////////////////////////Get deteriment and print it
+          for (int i = 0; i<multiVariable; i++)
+          {
+            cout<<name[i]<<" = "<<endl;
+            print(matrices[ptr-1]);
+          }
+				}
+
+			}
+
+			else
+
+			{
+
+				char in1, in2, out, operation;
+
+				operationParsing(line, in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+				switch (operation)
+
+				{
+          case '+':{
+            ////////////////////////////put function that Adds 2 Matrices :D out = in1 + in2  and print them
+              string zero = "[]";
+              Matrix first;
+              Matrix second;
+              Matrix output;
+              output.name = out;
+              matrices[ptr] = output;
+              ptr++;
+
+
+              for (int i = 0; i < ptr; i++)
+              {
+                if (matrices[i].name == in1) {first = matrices[i];}
+                if (matrices[i].name == in2) second = matrices[i];
+                if (matrices[i].name == out)
+                {output = first + second;
+                 matrices[i] = output;
+
+                  }
+              }
+
+                cout<<out<<" = ";
+              //  cout<<matrices[ptr-1].name;
+                print( matrices[ptr-1] );
+                matrices[ptr-1].name=out;
+
+
+
+
+            break;}
+
+          case '-':{
+
+            string zero = "[]";
+            Matrix first;
+            Matrix second;
+            Matrix output;
+            output.name = out;
+            matrices[ptr] = output;
+            ptr++;
+
+
+            for (int i = 0; i < ptr; i++)
+            {
+              if (matrices[i].name == in1) {first = matrices[i];}
+              if (matrices[i].name == in2) second = matrices[i];
+              if (matrices[i].name == out)
+              {output = first - second;
+               matrices[i] = output;
+
+                }
+            }
+
+              cout<<out<<" = ";
+            //  cout<<matrices[ptr-1].name;
+              print( matrices[ptr-1] );
+              matrices[ptr-1].name=out;
+
+
+            break;}
+
+          case '*':{
+            string zero = "[]";
+            Matrix first;
+            Matrix second;
+            Matrix output;
+            output.name = out;
+            matrices[ptr] = output;
+            ptr++;
+
+
+            for (int i = 0; i < ptr; i++)
+            {
+              if (matrices[i].name == in1) {first = matrices[i];}
+              if (matrices[i].name == in2) second = matrices[i];
+              if (matrices[i].name == out)
+              {output = first * second;
+               matrices[i] = output;
+
+                }
+            }
+
+              cout<<out<<" = ";
+            //  cout<<matrices[ptr-1].name;
+              print( matrices[ptr-1] );
+              matrices[ptr-1].name=out;
+
+
+
+
+          break;
+        }
+
+          case '/':{
+
+            string zero = "[]";
+            Matrix first;
+            Matrix second;
+            Matrix output;
+            output.name = out;
+            matrices[ptr] = output;
+            ptr++;
+
+
+            for (int i = 0; i < ptr; i++)
+            {
+              if (matrices[i].name == in1) {first = matrices[i];}
+              if (matrices[i].name == in2) second = matrices[i];
+              if (matrices[i].name == out)
+              {output = first / second;
+               matrices[i] = output;
+
+                }
+            }
+
+              cout<<out<<" = ";
+            //  cout<<matrices[ptr-1].name;
+              print( matrices[ptr-1] );
+              matrices[ptr-1].name=out;
+
+
+
+
+
+            break;}
+
+          case '1':{
+            string zero = "[]";
+            Matrix first;
+            Matrix second;
+            Matrix output;
+            output.name = out;
+            matrices[ptr] = output;
+            ptr++;
+
+
+            for (int i = 0; i < ptr; i++)
+            {
+              if (matrices[i].name == in1) {first = matrices[i];}
+              if (matrices[i].name == in2) second = matrices[i];
+              if (matrices[i].name == out)
+              {output =first.getTranspose();
+               matrices[i] = output;
+
+                }
+            }
+
+              cout<<out<<" = ";
+            //  cout<<matrices[ptr-1].name;
+              print( matrices[ptr-1] );
+              matrices[ptr-1].name=out;
+
+
+
+
+
+
+
+            break;}
+
+          case'.':{
+
+            int num = (int)in1 - 48;
+
+
+
+            /////////////////////////put division function tht divide num/matrix in2  = matrix out
+            string zero = "[]";
+            Matrix first(zero);
+            Matrix output(zero);
+            output.name = out;
+            matrices[ptr] = output;
+            ptr++;
+            for (int i = 0; i < ptr; i++)
+            {
+              if (matrices[i].name == in2) {first = matrices[i];}
+            }
+            output = first;
+              for(int r = 0; r<first.num_rows; r++ )
+              {
+                  for(int c = 0; c<first.num_col; c++)
+                  {
+                    output.values[r][c] = num/first.values[r][c];
+                  }
+              }
+              matrices[ptr-1]=output;
+              cout<<out<<" = "<<endl;
+              print(output);
+
+
+            break;}
+
+
+				}
+
+			}
+
+		}
+
+	}
+
   return 0;
 }
-
