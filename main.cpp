@@ -4,14 +4,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
-//#include<curses.h>
-//#include <ncurses.h>
+#include<curses.h>
+#include <ncurses.h>
 #include <algorithm>
 #include<fstream>
 #include <climits>
 #include "header.h"
 #include "cmath"
-#include "ctime";
+#include "ctime"
+
+
 using namespace std;
 
 
@@ -376,54 +378,6 @@ Matrix Power(Matrix m,int power){
 	}
 	return n;
 }
-Matrix Rand(int n,int m){
-	Matrix temp(n,m,3);
-	return temp;
-}
-
-Matrix Eye(int n,int m){
-	Matrix temp(n,m,2);
-	return temp;
-}
-
-Matrix Zero(int n,int m){
-	Matrix temp(n,m,0);
-	return temp;
-}
-
-Matrix One(int n,int m){
-	Matrix temp(n,m,1);
-	return temp;
-}
-
-
-Matrix Sin(Matrix m){
-	for(int i =0;i <m.num_rows;i++){
-		for(int j =0;j <m.num_col;j++){
-			m.values[i][j] = sin(m.values[i][j]);
-		}
-	}
-	return m;
-}
-
-Matrix Sqrt(Matrix m){
-	for(int i =0;i <m.num_rows;i++){
-		for(int j =0;j <m.num_col;j++){
-			m.values[i][j] = sqrt(m.values[i][j]);
-		}
-	}
-	return m;
-}
-
-Matrix Power(Matrix m,int power){
-	Matrix n = m;
-	for(int i =1;i <power;i++){
-		n *= m;
-
-	}
-	return n;
-}
-
 
 
 int main(int argc, char*argv[])
