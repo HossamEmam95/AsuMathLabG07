@@ -855,39 +855,14 @@ if (argc > 1)
 					}
 
 				string mat_string = str_conc(finlized_input, nr, ';');
-				cout<<mat_string<<endl;
+				// cout<<mat_string<<endl;
 				// new algorithm ends here
 
 
-				// char *name = new char[multiVariable];
-
-				// string m = "";
-
-				// stringParsing(mat_string, m, name); //function returns array of double values, name of the matrix
-				//
-				// for (int j = 0; j < multiVariable; j++)
-				//
-				// {
-
-					//////////////////////////	//Put Matrix Constructor using nR,nC,"""""""""""""name[j]""""""""""""",values
           Matrix w(mat_string);
           matrices[ptr] = w;
           matrices[ptr].name = name;
           ptr++;
-				// }
-				// if (inputFileLines[i].find(';') < inputFileLines[i].find(']'))
-				//
-				// {
-				//
-				// 	//////////////////////////////////////Get deteriment and print it
-        //   for (int i = 0; i<multiVariable; i++)
-        //   {
-        //     cout<<name[i]<<" = "<<endl;
-        //     print(matrices[ptr-1]);
-        //   }
-				// }
-
-			// }
 
 
 }
@@ -1095,6 +1070,8 @@ if (argc > 1)
 		}
 
 	}
+	for(int q=0; q<ptr; q++)
+	{print(matrices[q]); cout<<endl<<"-----------"<<endl;}
 
 // 	if (argc <= 1)
 //
