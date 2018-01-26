@@ -776,15 +776,16 @@ string str_conc(string* array ,int size, char separator)
 	string output_string = "[" ;
 	for(int i=0; i<size; i++)
 	{
-		cout<<"==========="<<endl;
-		cout<<"array: "<<array[i]<<endl;
-		cout<<"before op: "<<output_string<<endl;
+		// cout<<"==========="<<endl;
+		// cout<<"array: "<<array[i]<<endl;
+		// cout<<"before op: "<<output_string<<endl;
 
 		output_string = output_string + array[i].substr(1, array[i].length()-2) + separator;
-		cout<<"after op: "<<output_string<<endl;
-		cout<<"==========="<<endl;
+
 	}
 	output_string += "]";
+	// cout<<"after op: "<<output_string<<endl;
+	// cout<<"==========="<<endl;
 	return output_string ;
 }
 
@@ -834,12 +835,18 @@ if (argc > 1)
 				// new algorithm starts here
 
 				string line_after_sub = matrix_substituation(inputFileLines[i], matrices, ptr);
-				string line_after_replace = Replace(line_after_sub);//cout<<line_after_replace<<endl;
+				string line_after_replace = Replace(line_after_sub);
+				cout<<"============="<<endl;
+				cout<<"after sub: "<<line_after_sub<<endl;
+				cout<<"after replace: "<<line_after_replace<<endl;
+				cout<<"============="<<endl;
 				int nr = 0;
 				char name;
 				string* raw_input = stringToArray(line_after_replace, nr, name);
-				// for(int b =0; b<nr; b++)
-				// cout<<raw_input[b]<<endl<<"-----------"<<endl;
+				cout<<"raw input: *************"<<endl;
+				for(int b =0; b<nr; b++)
+				cout<<"line: "<<b<<raw_input[b]<<endl;
+				cout<<"**************"<<endl;
 				string* finlized_input = new string[nr];
 				for(int k=0; k<nr; k++ )
 					{
@@ -848,27 +855,37 @@ if (argc > 1)
 					if(case_ == 0)
 						{
 							finlized_input[k] = checkOperations(raw_input[k]);
+							cout<<"after case 0: "<< finlized_input[k]<<endl;
 						}
 					if(case_== 1)
 						{
-							string temp = raw_input[k].substr(1, raw_input[k].length()-1);
+							cout<<"raw_input: "<<raw_input[k]<<endl;
+							string temp = raw_input[k].substr(0, raw_input[k].length()-1);
+							cout<<"case 1 temp: "<<temp<<endl;
 							finlized_input[k] = checkOperations(temp);
+							cout<<"after case 1: "<< finlized_input[k]<<endl;
 
 						}
 					if(case_ == 2)
 						{
-							string temp = concat(rereplace(raw_input[k]));
+							cout<<"raw_input: "<<raw_input[k]<<endl;
+							cout<<"after rereplace: "<<rereplace(raw_input[k])<<endl;
+							string t = checkOperations(raw_input[k]);
+							cout<<"case 2 t: "<<t<<endl;
+							string temp = concat(rereplace(t));
+							cout<<"case 2 temp: "<<temp<<endl;
 							finlized_input[k] = checkOperations(temp);
-
+							cout<<"after case 2: "<< finlized_input[k]<<endl;
 						}
 					}
 
 				string mat_string = str_conc(finlized_input, nr, ';');
+				cout<<"final input: #############"<<endl;
 				for(int b =0; b<nr; b++)
-				cout<<finlized_input[b]<<endl<<"-----------"<<endl;
+				cout<<"line : "<< b << " "<<finlized_input[b]<<endl;
 				// cout<<mat_string<<endl;
 				// new algorithm ends here
-
+				cout<<"##########"<<endl;
 
           Matrix w(mat_string);
           matrices[ptr] = w;
