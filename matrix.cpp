@@ -565,17 +565,21 @@ Matrix Matrix::inverse()
 
 string Matrix::getString()
 {
-string s = "[";
-for(int iR=0;iR<num_rows;iR++)
-{
-for(int iC=0;iC<num_col;iC++)
-{
-char buffer[50];
-sprintf(buffer, "%g ", values[iR][iC]);
-s += buffer;
-}
-}
-return s + "]";
+  string s = "[";
+  for(int iR=0;iR<num_rows;iR++)
+  {
+    for(int iC=0;iC<num_col;iC++)
+    {
+      char buffer[50];
+      sprintf(buffer, "%g ", values[iR][iC]);
+      s += buffer;
+    }
+    s = s.substr(0, s.length()-1);
+    s += "; ";
+  }
+  s = s.substr(0, s.length()-2);
+  s += "]";
+  return s;
 }
 
 

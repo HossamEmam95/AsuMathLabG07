@@ -738,7 +738,9 @@ string matrix_substituation(string line, Matrix* matrcies, int ptr)
 					matrix = matrcies[j];
 					found = 1;
 				}
+
 			line.replace(i, 1, matrix.getString());
+
 			// error handling here
 		}
 	}
@@ -774,10 +776,16 @@ string str_conc(string* array ,int size, char separator)
 	string output_string = "[" ;
 	for(int i=0; i<size; i++)
 	{
-		output_string = output_string + array[i].substr(1, array[i].length()-2) + separator;
-	}
+		cout<<"==========="<<endl;
+		cout<<"array: "<<array[i]<<endl;
+		cout<<"before op: "<<output_string<<endl;
 
-	return output_string + "]";
+		output_string = output_string + array[i].substr(1, array[i].length()-2) + separator;
+		cout<<"after op: "<<output_string<<endl;
+		cout<<"==========="<<endl;
+	}
+	output_string += "]";
+	return output_string ;
 }
 
 
@@ -806,7 +814,8 @@ if (argc > 1)
 //
 		inputFileLines = inputfile(argv[1], nLines); //function returns lines from file (s) on array of strings
 //
-
+// for (int i = 0; i < nLines; i++)
+// { cout<<inputFileLines[i]<<endl;}
 
 		for (int i = 0; i < nLines; i++)
 		{
@@ -825,12 +834,12 @@ if (argc > 1)
 				// new algorithm starts here
 
 				string line_after_sub = matrix_substituation(inputFileLines[i], matrices, ptr);
-				string line_after_replace = Replace(line_after_sub);//cout<<line_after_sub<<endl;
+				string line_after_replace = Replace(line_after_sub);//cout<<line_after_replace<<endl;
 				int nr = 0;
 				char name;
 				string* raw_input = stringToArray(line_after_replace, nr, name);
 				// for(int b =0; b<nr; b++)
-				// cout<<raw_input[b]<<endl;
+				// cout<<raw_input[b]<<endl<<"-----------"<<endl;
 				string* finlized_input = new string[nr];
 				for(int k=0; k<nr; k++ )
 					{
@@ -855,6 +864,8 @@ if (argc > 1)
 					}
 
 				string mat_string = str_conc(finlized_input, nr, ';');
+				for(int b =0; b<nr; b++)
+				cout<<finlized_input[b]<<endl<<"-----------"<<endl;
 				// cout<<mat_string<<endl;
 				// new algorithm ends here
 
@@ -863,215 +874,218 @@ if (argc > 1)
           matrices[ptr] = w;
           matrices[ptr].name = name;
           ptr++;
-
+					// cout<<matrices[ptr-1].getString()<<endl;
+					// cout<<matrices[ptr-1].num_rows<<" "<<matrices[ptr-1].num_rows<<endl;
+					// print(matrices[ptr-1]);cout<<'\n';
 
 }
-			else
+			// else
+			//
+			// {
+			//
+  		// 		char in1, in2, out, operation;
+			// 	operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
+			//
+      //   switch (operation)
+			//
+			// 	{
+			//
+			//
+      //     				case '+':
+      //             {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+      //             string zero = "[]";
+      //             Matrix first;
+      //             Matrix second;
+      //             Matrix output;
+      //             output.name = out;
+      //             matrices[ptr] = output;
+      //             ptr++;
+			//
+			//
+      //             for (int i = 0; i < ptr; i++)
+      //             {
+      //               if (matrices[i].name == in1) {first = matrices[i];}
+      //               if (matrices[i].name == in2) second = matrices[i];
+      //               if (matrices[i].name == out)
+      //               {output = first + second;
+      //                matrices[i] = output;
+			//
+      //                 }
+      //             }
+			//
+      //               cout<<out<<" = "<<endl;
+      //             //  cout<<matrices[ptr-1].name;
+      //               print( matrices[ptr-1] );
+      //               matrices[ptr-1].name=out;
+			//
+      //                 break;}
+			//
+      //     				case '-':
+			//
+      //     			{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+      //           string zero = "[]";
+      //           Matrix first;
+      //           Matrix second;
+      //           Matrix output;
+      //           output.name = out;
+      //           matrices[ptr] = output;
+      //           ptr++;
+			//
+			//
+      //           for (int i = 0; i < ptr; i++)
+      //           {
+      //             if (matrices[i].name == in1) {first = matrices[i];}
+      //             if (matrices[i].name == in2) second = matrices[i];
+      //             if (matrices[i].name == out)
+      //             {output = first - second;
+      //              matrices[i] = output;
+			//
+      //               }
+      //           }
+			//
+      //             cout<<out<<" = "<<endl;
+      //           //  cout<<matrices[ptr-1].name;
+      //             print( matrices[ptr-1] );
+      //             matrices[ptr-1].name=out;
+			//
+      //     					break;}
+			//
+      //     				case '*':
+			//
+      //     			/////////////////////////////put mulitplication function from matrix
+      //           {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+      //           string zero = "[]";
+      //           Matrix first;
+      //           Matrix second;
+      //           Matrix output;
+      //           output.name = out;
+      //           matrices[ptr] = output;
+      //           ptr++;
+			//
+			//
+      //           for (int i = 0; i < ptr; i++)
+      //           {
+			//
+      //             if (matrices[i].name == in1) {first = matrices[i];}
+      //             if (matrices[i].name == in2) second = matrices[i];
+      //             if (matrices[i].name == out)
+      //             {output = first * second;
+      //              matrices[i] = output;
+			//
+      //               }
+      //           }
+			//
+      //             cout<<out<<" = "<<endl;
+      //           //  cout<<matrices[ptr-1].name;
+      //             print( matrices[ptr-1] );
+      //             matrices[ptr-1].name=out;
+			//
+      //               break;}
+			//
+			//
+      //     				case '/':
+      //             {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
+      //             string zero = "[]";
+      //             Matrix first;
+      //             Matrix second;
+      //             Matrix output;
+      //             output.name = out;
+      //             matrices[ptr] = output;
+      //             ptr++;
+			//
+			//
+      //             for (int i = 0; i < ptr; i++)
+      //             {
+      //               if (matrices[i].name == in1) {first = matrices[i];}
+      //               if (matrices[i].name == in2) second = matrices[i];
+      //               if (matrices[i].name == out)
+      //               {output = first / second;
+      //                matrices[i] = output;
+			//
+      //                 }
+      //             }
+			//
+      //               cout<<out<<" = "<<endl;
+      //             //  cout<<matrices[ptr-1].name;
+      //               print( matrices[ptr-1] );
+      //               matrices[ptr-1].name=out;
+			//
+      //                 break;}
+			//
+			//
+      //     				case '1':
+      //         {  string zero = "[]";
+      //             Matrix first;
+      //             Matrix second;
+      //             Matrix output;
+      //             output.name = out;
+      //             matrices[ptr] = output;
+      //             ptr++;
+			//
+			//
+      //             for (int i = 0; i < ptr; i++)
+      //             {
+      //               if (matrices[i].name == in1) {first = matrices[i];}
+      //               if (matrices[i].name == in2) second = matrices[i];
+      //               if (matrices[i].name == out)
+      //               {output =first.getTranspose();
+      //                matrices[i] = output;
+			//
+      //                 }
+      //             }
+			//
+      //               cout<<out<<" = "<<endl;
+      //             //  cout<<matrices[ptr-1].name;
+      //               print( matrices[ptr-1] );
+      //               matrices[ptr-1].name=out;
+			//
+      //             break;}
+			//
+			//
+			//
+			//
+      //     				case'.':
+      //             {
+      //                            int num = (int)in1 - 48;
+			//
+			//
+			//
+      //               /////////////////////////put division function tht divide num/matrix in2  = matrix out
+      //               string zero = "[]";
+      //               Matrix first(zero);
+      //               Matrix output(zero);
+      //               output.name = out;
+      //               matrices[ptr] = output;
+      //               ptr++;
+      //               for (int i = 0; i < ptr; i++)
+      //               {
+      //                 if (matrices[i].name == in2) {first = matrices[i];}
+      //               }
+      //               output = first;
+      //                 for(int r = 0; r<first.num_rows; r++ )
+      //                 {
+      //                     for(int c = 0; c<first.num_col; c++)
+      //                     {
+      //                       output.values[r][c] = num/first.values[r][c];
+      //                     }
+      //                 }
+      //                 matrices[ptr-1]=output;
+      //                 cout<<out<<" = "<<endl;
+      //                 print(output);
+			//
+			//
+      //               break;}
+			//
+				// }
 
-			{
-
-  				char in1, in2, out, operation;
-				operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-
-        switch (operation)
-
-				{
-
-
-          				case '+':
-                  {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-                  string zero = "[]";
-                  Matrix first;
-                  Matrix second;
-                  Matrix output;
-                  output.name = out;
-                  matrices[ptr] = output;
-                  ptr++;
-
-
-                  for (int i = 0; i < ptr; i++)
-                  {
-                    if (matrices[i].name == in1) {first = matrices[i];}
-                    if (matrices[i].name == in2) second = matrices[i];
-                    if (matrices[i].name == out)
-                    {output = first + second;
-                     matrices[i] = output;
-
-                      }
-                  }
-
-                    cout<<out<<" = "<<endl;
-                  //  cout<<matrices[ptr-1].name;
-                    print( matrices[ptr-1] );
-                    matrices[ptr-1].name=out;
-
-                      break;}
-
-          				case '-':
-
-          			{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-                string zero = "[]";
-                Matrix first;
-                Matrix second;
-                Matrix output;
-                output.name = out;
-                matrices[ptr] = output;
-                ptr++;
-
-
-                for (int i = 0; i < ptr; i++)
-                {
-                  if (matrices[i].name == in1) {first = matrices[i];}
-                  if (matrices[i].name == in2) second = matrices[i];
-                  if (matrices[i].name == out)
-                  {output = first - second;
-                   matrices[i] = output;
-
-                    }
-                }
-
-                  cout<<out<<" = "<<endl;
-                //  cout<<matrices[ptr-1].name;
-                  print( matrices[ptr-1] );
-                  matrices[ptr-1].name=out;
-
-          					break;}
-
-          				case '*':
-
-          			/////////////////////////////put mulitplication function from matrix
-                {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-                string zero = "[]";
-                Matrix first;
-                Matrix second;
-                Matrix output;
-                output.name = out;
-                matrices[ptr] = output;
-                ptr++;
-
-
-                for (int i = 0; i < ptr; i++)
-                {
-
-                  if (matrices[i].name == in1) {first = matrices[i];}
-                  if (matrices[i].name == in2) second = matrices[i];
-                  if (matrices[i].name == out)
-                  {output = first * second;
-                   matrices[i] = output;
-
-                    }
-                }
-
-                  cout<<out<<" = "<<endl;
-                //  cout<<matrices[ptr-1].name;
-                  print( matrices[ptr-1] );
-                  matrices[ptr-1].name=out;
-
-                    break;}
-
-
-          				case '/':
-                  {////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-                  string zero = "[]";
-                  Matrix first;
-                  Matrix second;
-                  Matrix output;
-                  output.name = out;
-                  matrices[ptr] = output;
-                  ptr++;
-
-
-                  for (int i = 0; i < ptr; i++)
-                  {
-                    if (matrices[i].name == in1) {first = matrices[i];}
-                    if (matrices[i].name == in2) second = matrices[i];
-                    if (matrices[i].name == out)
-                    {output = first / second;
-                     matrices[i] = output;
-
-                      }
-                  }
-
-                    cout<<out<<" = "<<endl;
-                  //  cout<<matrices[ptr-1].name;
-                    print( matrices[ptr-1] );
-                    matrices[ptr-1].name=out;
-
-                      break;}
-
-
-          				case '1':
-              {  string zero = "[]";
-                  Matrix first;
-                  Matrix second;
-                  Matrix output;
-                  output.name = out;
-                  matrices[ptr] = output;
-                  ptr++;
-
-
-                  for (int i = 0; i < ptr; i++)
-                  {
-                    if (matrices[i].name == in1) {first = matrices[i];}
-                    if (matrices[i].name == in2) second = matrices[i];
-                    if (matrices[i].name == out)
-                    {output =first.getTranspose();
-                     matrices[i] = output;
-
-                      }
-                  }
-
-                    cout<<out<<" = "<<endl;
-                  //  cout<<matrices[ptr-1].name;
-                    print( matrices[ptr-1] );
-                    matrices[ptr-1].name=out;
-
-                  break;}
-
-
-
-
-          				case'.':
-                  {
-                                 int num = (int)in1 - 48;
-
-
-
-                    /////////////////////////put division function tht divide num/matrix in2  = matrix out
-                    string zero = "[]";
-                    Matrix first(zero);
-                    Matrix output(zero);
-                    output.name = out;
-                    matrices[ptr] = output;
-                    ptr++;
-                    for (int i = 0; i < ptr; i++)
-                    {
-                      if (matrices[i].name == in2) {first = matrices[i];}
-                    }
-                    output = first;
-                      for(int r = 0; r<first.num_rows; r++ )
-                      {
-                          for(int c = 0; c<first.num_col; c++)
-                          {
-                            output.values[r][c] = num/first.values[r][c];
-                          }
-                      }
-                      matrices[ptr-1]=output;
-                      cout<<out<<" = "<<endl;
-                      print(output);
-
-
-                    break;}
-
-				}
-
-			}
+			// }
+			cout<<"loop"<<i<<"      "<<inputFileLines[i]<<endl;
 
 		}
-
 	}
-	for(int q=0; q<ptr; q++)
-	{print(matrices[q]); cout<<endl<<"-----------"<<endl;}
+
+	// for(int q=0; q<ptr; q++)
+	// {cout<<endl; print(matrices[q]); cout<<"-----------"<<endl;}
 
 // 	if (argc <= 1)
 //
