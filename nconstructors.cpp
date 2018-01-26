@@ -46,6 +46,12 @@ void dimnconstructors(string s, int &nRow, int &nCom,int &type)
 		 string column = s.substr(s.find(",")+1, s.find(")") - s.find(",")-1);
 		 nCom = atoi(column.c_str());
 	}
+	else
+	{
+		nRow=0;
+		nCom=0;
+	}
+	
 }
 //for testing
 //int main()
