@@ -284,37 +284,41 @@ string checkOperations(string s){
 
 //functions that concat to matrices together.
 string concat(string s){ //important : this string contains two matrices not more not less
+	cout<<"string to concat: "<<s<<endl;
 	string output  = "[";
 	Matrix matrix1("[]");
-	Matrix matrix2("[]");
+	Matrix matrix2("[5]");
 	char concatOperator;
 	int i = 0;
-	for(i;i < s.length();i++){
+	for(i;i < s.length();i++)
+	{
 		string str = "";
 		int num1 = 0;
 		int num2 = 0;
-		if(s[i] == '[')	{
+		if(s[i] == '[')
+		{
 			str += s[i];
 			num1++;
-			for(int t = i+1;t < s.length();t++){
+			for(int t = i+1;t < s.length();t++)
+			{
 				str += s[t];
-				if(s[t] =='['){
-					num1++;
-				}
-				else if(s[t] == ']'){
-					num2++;
-				}
-				if(num1 == num2){
-					i = t ;
+
+				if(s[t] == ']')
+				{
+					s = s.substr(t, s.length());
 					break;
 				}
+
 			}
 			concatOperator = s[i+1];
+			str = checkOperations(str);
+			cout<<"str 1: "<< str<<endl;
 			Matrix temp(str);
 			matrix1.copy(temp);
 			break;
 		}
 	}
+
 	for(i;i < s.length();i++){
 		string str = "";
 		int num1 = 0;
@@ -324,22 +328,24 @@ string concat(string s){ //important : this string contains two matrices not mor
 			num1++;
 			for(int t = i+1;t < s.length();t++){
 				str += s[t];
-				if(s[t] =='['){
-					num1++;
-				}
-				else if(s[t] == ']'){
-					num2++;
-				}
-				if(num1 == num2){
-					i = t ;
+
+				if(s[t] == ']'){
+					s = s.substr(t, s.length());
 					break;
 				}
+
 			}
+			str = checkOperations(str);
+			cout<<"str 2: "<<str<<endl;
 			Matrix temp(str);
 			matrix2 = temp;
 			break;
 		}
 	}
+	cout<<"^^^^^^^^^^^"<<endl;
+	cout<<"matrix 1: "<<matrix1.getString()<<endl;
+	cout<<"matrix 2: "<<matrix2.getString()<<endl;
+	cout<<"^^^^^^^^^^^"<<endl;
 	if(concatOperator == ','||concatOperator == ' '){
 		matrix1.addColumn(matrix2);
 	}
@@ -365,19 +371,38 @@ string concat(string s){ //important : this string contains two matrices not mor
 
 
 
-bool lineTest(string s) //function returns true if line, false if operation
+int lineTest(string s) //function returns 1 if line, 0 if pure operation,2 if operation between 2 matrices
 
 {
-	bool index = false;
+	if (s.length() < 3) return 3;
+	bool index = 0;
 	for (int i = 0; i < s.length(); i++)
 	{
 		if (s[i] == '[')
 		{
-			index = true;
+			index = 1;
 		}
 	}
+	if(index == 0){
+		int index2 = 0;
+		string alpha = "ABCDEFGHIGKLMNOPQRSTUVWXYZ";
+		for (int i = 0; i < s.length(); i++)
+	{
+		if (alpha.find(s[i])!=string::npos)
+		{
+			index2++;
+		}
+		if(index2>1){
+			return 2;
+		}
+	}
+	}
+
+
 	return index;
+
 }
+
 
 int stringopenclosed(string s)
 {
@@ -821,13 +846,13 @@ if (argc > 1)
 		for (int i = 0; i < nLines; i++)
 		{
 
-			bool lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
+			int lineType = lineTest(inputFileLines[i]); //function returns true if line, false if operation
 
 			int multiVariable = 0;
 
 			multiVariable = testMultiVariables(inputFileLines[i]); //function tests if there multi variable in the same line and returns number of the variables
 
-			if (lineType)
+			if (lineType == 1)
 
 			{
 
@@ -837,13 +862,14 @@ if (argc > 1)
 				string line_after_sub = matrix_substituation(inputFileLines[i], matrices, ptr);
 				string line_after_replace = Replace(line_after_sub);
 				cout<<"============="<<endl;
+				cout<<"line before sub: "<<inputFileLines[i]<<endl;
 				cout<<"after sub: "<<line_after_sub<<endl;
 				cout<<"after replace: "<<line_after_replace<<endl;
 				cout<<"============="<<endl;
 				int nr = 0;
 				char name;
 				string* raw_input = stringToArray(line_after_replace, nr, name);
-				cout<<"raw input: *************"<<endl;
+				cout<<"************ raw input: *************"<<endl;
 				for(int b =0; b<nr; b++)
 				cout<<"line: "<<b<<raw_input[b]<<endl;
 				cout<<"**************"<<endl;
@@ -870,9 +896,9 @@ if (argc > 1)
 						{
 							cout<<"raw_input: "<<raw_input[k]<<endl;
 							cout<<"after rereplace: "<<rereplace(raw_input[k])<<endl;
-							string t = checkOperations(raw_input[k]);
-							cout<<"case 2 t: "<<t<<endl;
-							string temp = concat(rereplace(t));
+							// string t = checkOperations(raw_input[k]);
+							// cout<<"case 2 t: "<<t<<endl;
+							string temp = concat(rereplace(raw_input[k].substr(0,raw_input[k].length())));
 							cout<<"case 2 temp: "<<temp<<endl;
 							finlized_input[k] = checkOperations(temp);
 							cout<<"after case 2: "<< finlized_input[k]<<endl;
@@ -896,7 +922,27 @@ if (argc > 1)
 					// print(matrices[ptr-1]);cout<<'\n';
 
 }
-			// else
+else if(lineType == 0){
+	int start = inputFileLines[i].find('=');
+	string opStr = inputFileLines[i].substr(start+1);
+	double result = bigOperationSolving(opStr);
+	Matrix w(result);
+          matrices[ptr] = w;
+          matrices[ptr].name = inputFileLines[i][0];
+          ptr++;
+
+}
+
+else if(lineType == 3)
+{
+	Matrix H(" ");
+	for(int q=0; q<ptr; q++)
+	if(matrices[q].name == inputFileLines[i][0]) H = matrices[q];
+		print(H); cout<<"-----------"<<endl;
+}
+
+
+			// else(lineType == 2)
 			//
 			// {
 			//
@@ -1096,13 +1142,14 @@ if (argc > 1)
 				// }
 
 			// }
+			cout<<"loop mat_string: "<<i<<"      "<<matrices[i].getString()<<endl;
 			cout<<"loop"<<i<<"      "<<inputFileLines[i]<<endl;
-
+			cout<<"oooooooooooooooooooooooooooooooooooooooooo"<<endl;
 		}
 	}
 
-	// for(int q=0; q<ptr; q++)
-	// {cout<<endl; print(matrices[q]); cout<<"-----------"<<endl;}
+	for(int q=0; q<ptr; q++)
+	{cout<<endl;cout<<matrices[q].name; print(matrices[q]); cout<<"-----------"<<endl;}
 
 // 	if (argc <= 1)
 //
