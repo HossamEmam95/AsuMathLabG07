@@ -368,13 +368,63 @@ string concat(string s){ //important : this string contains two matrices not mor
 }
 
 
+bool testnconstructors(string s)
+{
+	if ((s.find("zeros") != std::string::npos) || (s.find("ones") != std::string::npos) || (s.find("eye") != std::string::npos) || ((s.find("rand") != std::string::npos)))
+	{
+		return true;
+	}
+	else
+		return false;
+}
 
 
+void dimnconstructors(string s, int &nRow, int &nCom,int &type)
+{
+	type = 10;
+	if (s.find("zeros") != std::string::npos)
+	{
+		type = 0;
+	}
+	else if (s.find("ones") != std::string::npos)
+	{
+		type = 1;
+	}
+	else if (s.find("eye") != std::string::npos)
+	{
+		type = 2;
+	}
+	else if (s.find("rand") != std::string::npos)
+	{
+		type = 3;
+	}
+	if ((type >= 0) && (type <= 3))
+	{
+		 string row =s.substr(s.find("(")+1, s.find(",") - s.find("(")-1);
+		 nRow= atoi(row.c_str());
+		 string column = s.substr(s.find(",")+1, s.find(")") - s.find(",")-1);
+		 nCom = atoi(column.c_str());
+	}
+	else
+	{
+		nRow=0;
+		nCom=0;
+	}
+
+}
 
 int lineTest(string s) //function returns 1 if line, 0 if pure operation,2 if operation between 2 matrices
 
 {
 	if (s.length() < 3) return 3;
+	if (testnconstructors(s))
+	{
+		return 4;
+	}
+	else
+	{
+
+
 	bool index = 0;
 	for (int i = 0; i < s.length(); i++)
 	{
@@ -400,7 +450,7 @@ int lineTest(string s) //function returns 1 if line, 0 if pure operation,2 if op
 
 
 	return index;
-
+}
 }
 
 
@@ -942,6 +992,43 @@ else if(lineType == 3)
 }
 
 
+else if (lineType == 4)
+{
+	int nRows, nCol, s_type;
+	dimnconstructors(inputFileLines[i], nRows, nCol, s_type);
+	switch (s_type) {
+		case 0:
+		{
+			Matrix w = Zero(nRows, nCol);
+			matrices[ptr] = w;
+			matrices[ptr].name = inputFileLines[i][0];
+			ptr++;
+		}
+		case 1:
+		{
+			Matrix w = One(nRows, nCol);
+			matrices[ptr] = w;
+			matrices[ptr].name = inputFileLines[i][0];
+			ptr++;
+		}
+		case 2:
+		{
+			Matrix w = Eye(nRows, nCol);
+			matrices[ptr] = w;
+			matrices[ptr].name = inputFileLines[i][0];
+			ptr++;
+		}
+		case 3:
+		{
+			Matrix w = Rand(nRows, nCol);
+			matrices[ptr] = w;
+			matrices[ptr].name = inputFileLines[i][0];
+			ptr++;
+		}
+	}
+
+}
+
 			// else(lineType == 2)
 			//
 			// {
@@ -1149,7 +1236,7 @@ else if(lineType == 3)
 	}
 
 	for(int q=0; q<ptr; q++)
-	{cout<<endl;cout<<matrices[q].name; print(matrices[q]); cout<<"-----------"<<endl;}
+	{cout<<endl;cout<<matrices[q].name<<endl; print(matrices[q]); cout<<"-----------"<<endl;}
 
 // 	if (argc <= 1)
 //
