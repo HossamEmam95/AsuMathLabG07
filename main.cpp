@@ -486,14 +486,11 @@ int lineTest(string s) //function returns 1 if line, 0 if pure operation,2 if op
 
 {
 	if (s.length() < 3) return 3;
-	if (testnconstructors(s))
+	else if (testnconstructors(s))
 	{
 		return 4;
 	}
-	else
-	{
-
-
+	else {
 	bool index = 0;
 	for (int i = 0; i < s.length(); i++)
 	{
@@ -515,6 +512,7 @@ int lineTest(string s) //function returns 1 if line, 0 if pure operation,2 if op
 			return 2;
 		}
 	}
+
 	}
 
 
@@ -1065,6 +1063,7 @@ else if (lineType == 4)
 {
 	int nRows, nCol, s_type;
 	dimnconstructors(inputFileLines[i], nRows, nCol, s_type);
+	//cout<<s_type<<endl;
 	switch (s_type) {
 		case 0:
 		{
@@ -1072,6 +1071,7 @@ else if (lineType == 4)
 			matrices[ptr] = w;
 			matrices[ptr].name = inputFileLines[i][0];
 			ptr++;
+			break;
 		}
 		case 1:
 		{
@@ -1079,6 +1079,7 @@ else if (lineType == 4)
 			matrices[ptr] = w;
 			matrices[ptr].name = inputFileLines[i][0];
 			ptr++;
+			break;
 		}
 		case 2:
 		{
@@ -1086,6 +1087,7 @@ else if (lineType == 4)
 			matrices[ptr] = w;
 			matrices[ptr].name = inputFileLines[i][0];
 			ptr++;
+			break;
 		}
 		case 3:
 		{
@@ -1093,6 +1095,7 @@ else if (lineType == 4)
 			matrices[ptr] = w;
 			matrices[ptr].name = inputFileLines[i][0];
 			ptr++;
+			break;
 		}
 	}
 
