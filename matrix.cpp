@@ -104,21 +104,48 @@ void Matrix::copy(string s)
   char* lineContext;
   const char* lineSeparators = ";\r\n";
   char* line = strtok_r(buffer, lineSeparators, &lineContext);
+  int whileenter=0;int counter0=0;
+int flag=0;
+string f;
   while(line)
     {
+      f=line;
       Matrix row;
       char* context;
+      if(f.find(']')!=string::npos)
+      flag=1;
       const char* separators = " []";
       char* token = strtok_r(line, separators, &context);
+      int counter1=0;
         while(token)
         {
+          if(whileenter==0)
+          counter0++;
+          else
+          counter1++;
           Matrix item = atof(token);
           row.addColumn(item);
           token = strtok_r(NULL, separators, &context);
         }
+        if(whileenter==1)
+        {
+          // cout<<counter0<<endl;
+          // cout<<counter1<<endl;
+          // cout<<flag<<endl;
+          if((counter0!=counter1) && flag==0)
+          {
+
+           throw 4;
+         }
+
+          else
+          counter0=counter1;
+
+        }
         if(row.num_col>0 && (row.num_col==num_col || num_rows==0))
         addRow(row);
         line = strtok_r(NULL, lineSeparators, &lineContext);
+        whileenter=1;
     }
     delete[] buffer;
   }
