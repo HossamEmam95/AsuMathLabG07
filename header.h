@@ -137,5 +137,62 @@ void swapRows(int r1, int r2);
 Matrix createIdentity(int size);
 Matrix getTranspose();
 Matrix operator^(int power);
+};
 
+
+
+class CComplex {
+double R;
+double I;
+
+public:
+
+CComplex();
+CComplex(string s);
+CComplex(double R, double I);
+CComplex(const CComplex& C);
+void copy(const CComplex& C);
+string getString();
+double magnitude();
+double angle();
+void negative();
+double real();
+double imaginary();
+static CComplex addComplex(const CComplex& A, const CComplex& B);
+void add(const CComplex& C);
+CComplex operator=(const CComplex& C);
+CComplex operator=(double D);
+void operator+=(CComplex& C);
+void operator-=(CComplex& C);
+CComplex operator+=(double D);
+CComplex operator+(CComplex& C);
+CComplex operator-(CComplex& C);
+CComplex operator+(double D);
+CComplex operator*(CComplex& A);
+CComplex operator/(CComplex& A);
+void operator/=(CComplex& A);
+void operator*=(CComplex& A);
+CComplex operator-(); //Negative
+CComplex operator^(double D);
+void operator^=(double d);
+operator const string(); //Cast
+ friend istream& operator >> (istream& is, CComplex& C) {
+  is>>C.R;
+  is>>C.I;
+  return is;
+}
+friend ostream& operator << (ostream& os, CComplex &C)
+{
+  os<<C.getString();
+  return os;
+}
+CComplex operator++(); //Pre Increment
+CComplex operator++(int); //Post Increment, int is not used
+double operator[](string name); //Index
+double operator()(string name, string info = ""); //Argument
+bool operator<(CComplex &A);
+bool operator>(CComplex &A);
+bool operator<=(CComplex &A);
+bool operator>=(CComplex &A);
+bool operator==(CComplex &A);
 };

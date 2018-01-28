@@ -1,7 +1,7 @@
 #include "header.h"
 #include "cmath"
 #define EPS 1e-10
-
+#define PI 3.141593
 Matrix::Matrix()
 {
   num_rows = num_col = 0;
@@ -565,21 +565,18 @@ Matrix Matrix::inverse()
 
 string Matrix::getString()
 {
-  string s = "[";
-  for(int iR=0;iR<num_rows;iR++)
-  {
-    for(int iC=0;iC<num_col;iC++)
-    {
-      char buffer[50];
-      sprintf(buffer, "%g ", values[iR][iC]);
-      s += buffer;
-    }
-    s = s.substr(0, s.length()-1);
-    s += "; ";
-  }
-  s = s.substr(0, s.length()-2);
-  s += "]";
-  return s;
+string s;
+for(int iR=0;iR<num_rows;iR++)
+{
+for(int iC=0;iC<num_col;iC++)
+{
+char buffer[50];
+sprintf(buffer, "%g\t", values[iR][iC]);
+s += buffer;
+}
+s+="\n";
+}
+return s;
 }
 
 
@@ -671,7 +668,7 @@ Matrix EYE(int n,int m){
 }
 
 Matrix OptimizedPower(Matrix m,int power){
-	Matrix temp = EYE(m.num_rows,m.num_col);
+	Matrix temp = EYE(m.num_rows,m.num_col); 
 	if(power%2){
 		temp =m;
 		power-=1;
@@ -694,4 +691,282 @@ Matrix Matrix::operator^(int power)
   Matrix q = *this;
   Matrix r = OptimizedPower(q,power);
   return r;
+}
+
+
+
+
+
+
+CComplex::CComplex()
+{
+  R = I = 0.0;
+ }
+CComplex::CComplex(double R, double I)
+{
+   this->R = R;
+   this->I = I;
+  }
+//Optional copy constructor and copy //All attributes are statically allocated
+CComplex::CComplex(const CComplex& C)
+ {
+   copy(C);
+  }
+
+CComplex::CComplex(string s)
+{
+	if(s.find(",") != std::string::npos){
+		string first = s.substr(0, s.find(","));
+		string second = s.substr(s.find(",") + 1, s.length() - s.find(",") - 1);
+		R = atof(first.c_str());
+		I = atof(second.c_str());
+	}
+	else{
+		if (s.find("i") == std::string::npos)
+		{
+			R = atof(s.c_str());
+			I = 0.0;
+		}
+		else if (s.find("i") != std::string::npos)
+		{
+			if ((s.find("+") == std::string::npos) && (s.find("-") == std::string::npos))
+			{
+				I = atof(s.c_str());
+				R = 0.0;
+			}
+			else if (s.find("+") != std::string::npos)
+			{
+				string first = s.substr(0, s.find("+"));
+				string second = s.substr(s.find("+") + 1, s.length() - s.find("+") - 1);
+				if (first.find("i") == std::string::npos)
+				{
+					R = atof(first.c_str());
+				}
+				else if (first.find("i") != std::string::npos)
+				{
+					I = atof(first.c_str());
+				}
+				if (second.find("i") == std::string::npos)
+				{
+					R = atof(second.c_str());
+				}
+				else if (second.find("i") != std::string::npos)
+				{
+					I = atof(second.c_str());
+				}
+			}
+			else if (s.find("-") != std::string::npos)
+			{
+				string first = s.substr(0, s.rfind("-"));
+				string second = s.substr(s.rfind("-"), s.length() - s.find("-"));
+				if (first.find("i") == std::string::npos)
+				{
+					R = atof(first.c_str());
+				}
+				else if (first.find("i") != std::string::npos)
+				{
+					I = atof(first.c_str());
+				}
+				if (second.find("i") == std::string::npos)
+				{
+					R = atof(second.c_str());
+				}
+				else if (second.find("i") != std::string::npos)
+				{
+					I = atof(second.c_str());
+				}
+			}
+		}
+	}
+}
+
+void CComplex::copy(const CComplex& C)
+ {
+   R = C.R;
+   I = C.I;
+ }
+string CComplex::getString()
+{
+  char text[100];
+  if(I==0)
+  sprintf(text, "%g", R);
+  else if(R==0)
+  sprintf(text, "%gi", I);
+  else if(I>0)sprintf(text, "%g + %gi", R, I);
+  else if(I<0)sprintf(text, "%g - %gi", R, -I);
+  return string(text);
+ }
+ double CComplex::magnitude()
+ {
+   return sqrt(R*R+I*I);
+  }
+double CComplex::angle() {
+  return atan2(I, R);
+}
+void CComplex::negative() {
+   R*=-1; I*=-1;
+  }
+double CComplex::real() {
+   return R;
+  }
+double CComplex::imaginary()
+ {
+   return I;
+  }
+CComplex CComplex::addComplex(const CComplex& A,const CComplex& B)
+ { CComplex C;
+   C.R = A.R + B.R;
+   C.I = A.I + B.I;
+   return C;
+ }
+void CComplex::add(const CComplex& C)
+{
+   R += C.R;
+   I += C.I;
+ }
+ CComplex CComplex::operator=(const CComplex& C)
+  {
+     copy(C);
+     return *this;
+    }
+CComplex CComplex::operator=(double D)
+{
+  R = D;
+  I = 0;
+  return *this;
+ }
+void CComplex::operator+=(CComplex& C)
+{
+  add(C);
+ }
+void CComplex::operator-=(CComplex& C){
+	R -= C.real();
+	I -= C.imaginary();
+}
+CComplex CComplex::operator+=(double D)
+{
+   R += D;
+  }
+CComplex CComplex::operator+(CComplex& C)
+{
+  return addComplex(*this, C);
+ }
+CComplex CComplex::operator-(CComplex& C){
+	CComplex negC = -C;
+	CComplex result = *this + negC;
+	return result;
+}
+CComplex CComplex::operator+(double D)
+{
+  return addComplex(*this, CComplex(D, 0));
+ }
+ CComplex CComplex::operator-()
+ {
+   return CComplex(-R, -I);
+ }
+CComplex CComplex::operator*(CComplex& A){
+	double R = A.real()*this->real() - A.imaginary()*this->imaginary();
+	double I = A.real()*this->imaginary() + A.imaginary()*this->real();
+	return CComplex(R, I);
+}
+CComplex CComplex::operator/(CComplex& A){
+	double conReal = A.real();
+	double conImg = A.imaginary()*-1;
+	CComplex con (conReal,conImg);
+	CComplex don = A * con; 
+	CComplex nom = *this * con;
+	double resultReal = (nom.real()/don.magnitude());
+	double resultImg = (nom.imaginary()/don.magnitude());
+	CComplex result (resultReal,resultImg);
+	return result;
+}
+void CComplex::operator/=(CComplex& A){
+	CComplex temp = *this/A;
+	R=temp.real();
+	I = temp.imaginary();
+}
+void CComplex::operator*=(CComplex& A){
+	double r = A.real()*R - A.imaginary()*I;
+	
+	double i = A.real()*I + A.imaginary()*R;
+	R = r; 
+	I = i;
+}
+CComplex::operator const string()
+{
+  return getString();
+}
+
+
+CComplex CComplex::operator++()
+{
+  R++;
+  return *this;
+}
+CComplex CComplex::operator++(int)
+{
+  CComplex C = *this;
+   R+=1;
+    return C;
+   }
+double CComplex::operator[](string name)
+{
+  if(name=="magnitude")
+  return magnitude();
+  if(name=="angle")
+  return angle();
+   if(name=="real")
+   return real();
+   if(name=="imaginary")
+   return imaginary();
+   return 0.0;
+  }
+double CComplex::operator()(string name, string info)
+{ if(name=="angle")
+{
+   if(info=="degree")
+   return angle()*180.0/PI;
+   if(info=="radian" || info.length()==0)
+   return angle();
+ }
+return (*this)[name];
+ }
+CComplex CComplex::operator^(double D){
+        if((D-(int)D) == 0){
+		CComplex C = *this;
+		for(int i = 1;i<D;i++){
+			C *= *this; 
+		}
+		return C;
+	}
+	else{
+		double mag = magnitude();
+		double r = pow(mag,D);
+		CComplex C(r,0);
+		return C;
+	}
+}
+void CComplex::operator^=(double d){
+	*this=*this^d;
+}
+bool CComplex::operator<(CComplex &A)
+{
+	return magnitude() < A.magnitude();
+}
+bool CComplex::operator>(CComplex &A)
+{
+	return magnitude() > A.magnitude();
+}
+bool CComplex::operator<=(CComplex &A)
+{
+	return magnitude() <= A.magnitude();
+}
+bool CComplex::operator>=(CComplex &A)
+{
+	return magnitude() >= A.magnitude();
+}
+bool CComplex::operator==(CComplex &A)
+{
+	return magnitude() == A.magnitude();
+	
 }
