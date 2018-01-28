@@ -1587,9 +1587,9 @@ catch (int e){
 	if(e==4)
 	cout<<"matrix dimension inavlid "<<endl;
 	if(e==1)
-	cout<<"syntax error  missing bracket"<<endl;
+	cout<<"syntax error missing bracket"<<endl;
 	if(e==2)
-	cout<<"nset el operand ya beh"<<endl;
+	cout<<"syntax error missing the operand"<<endl;
 if(e==3)
 cout<<"undefined"<<endl;
 
