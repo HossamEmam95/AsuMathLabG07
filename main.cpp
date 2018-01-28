@@ -1585,7 +1585,7 @@ else if (lineType == 4)
 catch (int e){
 
 	if(e==4)
-	cout<<"matrix dimension inavlid ya 3omri"<<endl;
+	cout<<"matrix dimension inavlid "<<endl;
 	if(e==1)
 	cout<<"syntax error  fe bracket na2s 7adrtk"<<endl;
 	if(e==2)
