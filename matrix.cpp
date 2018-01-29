@@ -792,8 +792,8 @@ string CComplex::getString()
   sprintf(text, "%g", R);
   else if(R==0)
   sprintf(text, "%gi", I);
-  else if(I>0)sprintf(text, "%g + %gi", R, I);
-  else if(I<0)sprintf(text, "%g - %gi", R, -I);
+  else if(I>0)sprintf(text, "%g+%gi", R, I);
+  else if(I<0)sprintf(text, "%g-%gi", R, -I);
   return string(text);
  }
  double CComplex::magnitude()

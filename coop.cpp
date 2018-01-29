@@ -50,7 +50,6 @@ CComplex operationSolving(string s){
 			CComplex C = numbers[i];
 			double d = numbers[i+1].magnitude();
 			numbers[i] = C^d;
-			cout<<numbers[i]<<endl;
 			for(int j = i;j<op_counter-1;j++){
 				numbers[j+1] = numbers[j+2];
 				operations[j] = operations[j+1];
@@ -114,6 +113,7 @@ CComplex operationSolving(string s){
 }
 
 CComplex bigOperationSolving(string s){
+	
 	CComplex result;
 	int start = 0;
 	int end = 0;
@@ -122,7 +122,7 @@ CComplex bigOperationSolving(string s){
 		int asci = (int) s[i];
 		int num1 = 0;
 		int num2 = 0;
-		if (((asci >= 65) && (asci <= 90)) || ((asci >= 97) && (asci <= 122))){
+		if ((((asci >= 65) && (asci <= 90)) || ((asci >= 97) && (asci <= 122)))&&!(asci==105&&(int)s[i-1]<=57&&(int)s[i-1]>=48)){
 			string tri_op ("");
 			tri_op += s[i];
 			int no1 = 0;
@@ -191,14 +191,42 @@ CComplex bigOperationSolving(string s){
 		}
 		else{
 				new_operation += s[i];
-		} 
+		}
 	}
 	result = operationSolving(new_operation);
+	
 	return result;	
 }
 
+string checkOperations(string s){
+	string newString = "[";
+	char* buffer = new char[s.length()+1];
+	strcpy(buffer, s.c_str());
+	char* lineContext;
+	const char* lineSeparators = ";\r\n";
+	char* line = strtok_r(buffer, lineSeparators, &lineContext);
+	while(line){
+		char* context;
+		const char* separators = " []";
+		char* token = strtok_r(line, separators, &context);
+		while(token){
+			string operation = "";
+			operation += token;
+			CComplex result = bigOperationSolving(operation);
+			newString += result.getString();
+			newString += ' ';
+			token = strtok_r(NULL, separators, &context);
+		}
+		newString = newString.substr(0,newString.length()-1);
+		newString += ';';
+		line = strtok_r(NULL, lineSeparators, &lineContext);
+	}
+	newString = newString.substr(0,newString.length()-1);
+	newString += "]";
+	return newString;
+}
 int main(){
-	CComplex C = operationSolving("-1.000000,0.000000i/11.320000,0.000000i-12.1*3.1+6.400000,0.000000i^0.454545,0.000000i");
-	cout <<C<<endl;
+	string d = checkOperations("1.2+1i 2.3+3i 5.0 3.4;1.3 2.4 3.2 2.1;4.6 1.3 7.8 12.6;1.2^3 3+1.2 15/(2) (1.2+3.4-5.6)/(2.1*3.2+4.6)-12.1*3.1+(1.2+5.2)^(4/(3.2+5.6))");
+	cout <<d<<endl;
 	return 0;
 }
