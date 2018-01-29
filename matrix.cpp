@@ -1,7 +1,7 @@
 #include "header.h"
 #include "cmath"
 #define EPS 1e-10
-#define PI 3.141593
+
 Matrix::Matrix()
 {
   num_rows = num_col = 0;
@@ -565,18 +565,21 @@ Matrix Matrix::inverse()
 
 string Matrix::getString()
 {
-string s;
-for(int iR=0;iR<num_rows;iR++)
-{
-for(int iC=0;iC<num_col;iC++)
-{
-char buffer[50];
-sprintf(buffer, "%g\t", values[iR][iC]);
-s += buffer;
-}
-s+="\n";
-}
-return s;
+  string s = "[";
+  for(int iR=0;iR<num_rows;iR++)
+  {
+    for(int iC=0;iC<num_col;iC++)
+    {
+      char buffer[50];
+      sprintf(buffer, "%g ", values[iR][iC]);
+      s += buffer;
+    }
+    s = s.substr(0, s.length()-1);
+    s += "; ";
+  }
+  s = s.substr(0, s.length()-2);
+  s += "]";
+  return s;
 }
 
 
@@ -668,7 +671,7 @@ Matrix EYE(int n,int m){
 }
 
 Matrix OptimizedPower(Matrix m,int power){
-	Matrix temp = EYE(m.num_rows,m.num_col); 
+	Matrix temp = EYE(m.num_rows,m.num_col);
 	if(power%2){
 		temp =m;
 		power-=1;
@@ -692,9 +695,6 @@ Matrix Matrix::operator^(int power)
   Matrix r = OptimizedPower(q,power);
   return r;
 }
-
-
-
 
 
 

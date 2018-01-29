@@ -137,8 +137,8 @@ void swapRows(int r1, int r2);
 Matrix createIdentity(int size);
 Matrix getTranspose();
 Matrix operator^(int power);
-};
 
+};
 
 
 class CComplex {
@@ -195,4 +195,4 @@ bool operator>(CComplex &A);
 bool operator<=(CComplex &A);
 bool operator>=(CComplex &A);
 bool operator==(CComplex &A);
-};
+};s
