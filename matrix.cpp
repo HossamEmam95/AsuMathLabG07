@@ -722,3 +722,24 @@ Matrix Matrix::operator^(int power)
   Matrix r = OptimizedPower(q,power);
   return r;
 }
+Matrix Matrix:: powerbyelement(int d)
+{
+  Matrix c(this->num_rows,this->num_col);
+  for(int i=0;i<c.num_rows;i++)
+  for(int j=0;j<c.num_col;j++)
+  {
+    c.values[i][j]=pow(this->values[i][j],d);
+  }
+  return c;
+}
+
+Matrix Matrix:: addbyelement(int d)
+{
+  Matrix c(this->num_rows,this->num_col);
+  for(int i=0;i<c.num_rows;i++)
+  for(int j=0;j<c.num_col;j++)
+  {
+    c.values[i][j]=this->values[i][j]+d;
+  }
+  return c;
+}

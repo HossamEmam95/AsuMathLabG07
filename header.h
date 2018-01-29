@@ -88,6 +88,9 @@ public:
   Matrix operator-();
   Matrix operator+();
 
+//new
+Matrix powerbyelement(int d);
+Matrix addbyelement(int d);
 
   friend istream &operator>>( istream &input, Matrix &D )
 
