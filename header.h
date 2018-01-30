@@ -91,7 +91,8 @@ public:
 //new
 Matrix powerbyelement(int d);
 Matrix addbyelement(int d);
-
+Matrix divbyelement(double d);
+Matrix matrix_divbymatrix(Matrix &a, Matrix &b);
   friend istream &operator>>( istream &input, Matrix &D )
 
   { for (int i = 0; i<D.num_rows; i++)
