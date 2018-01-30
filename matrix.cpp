@@ -722,3 +722,46 @@ Matrix Matrix::operator^(int power)
   Matrix r = OptimizedPower(q,power);
   return r;
 }
+Matrix Matrix:: powerbyelement(int d)
+{
+  Matrix c(this->num_rows,this->num_col);
+  for(int i=0;i<c.num_rows;i++)
+  for(int j=0;j<c.num_col;j++)
+  {
+    c.values[i][j]=pow(this->values[i][j],d);
+  }
+  return c;
+}
+Matrix Matrix::divbyelement(double d)
+{
+Matrix c(this->num_rows,this->num_col);
+  for(int i=0;i<c.num_rows;i++)
+  for(int j=0;j<c.num_col;j++)
+  {
+    c.values[i][j]=this->values[i][j]/d;
+  }
+  return c;
+}
+Matrix Matrix:: addbyelement(int d)
+{
+  Matrix c(this->num_rows,this->num_col);
+  for(int i=0;i<c.num_rows;i++)
+  for(int j=0;j<c.num_col;j++)
+  {
+    c.values[i][j]=this->values[i][j]+d;
+  }
+  return c;
+}
+Matrix Matrix:: matrix_divbymatrix(Matrix &a, Matrix &b)
+{
+	Matrix c(a.num_rows, b.num_col);
+	for(int i=0;i<a.num_rows;i++)
+		for (int j = 0; j < a.num_col; j++)
+		{
+			c.values[i][j] = ((a.values[i][j]) / (b.values[i][j]));
+
+
+		}
+
+	return c;
+}

@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstdarg>
-#include<curses.h>
-#include <ncurses.h>
+//#include<curses.h>
+//#include <ncurses.h>
 #include <algorithm>
 #include<fstream>
 #include <climits>
@@ -932,7 +932,433 @@ string str_conc(string* array ,int size, char separator)
 	// cout<<"==========="<<endl;
 	return output_string ;
 }
+Matrix operationReduce(string s,Matrix* matrices,int ptr){
+	int op_counter = 0;
+	for(int i =0;i<s.length();i++){
+		if(s[i] =='+'||s[i] =='-'||s[i] =='*'||s[i] =='/'||s[i] =='^'||s[i] =='%') {
+			op_counter++;
+			i++;
+		}
+	}
+	int mat_counter = 0;
+	for(int i =0;i<s.length();i++){
+		int ascii = (int) s[i];
+		if(((ascii >= 65) && (ascii <= 90)) || ((ascii >= 97) && (ascii <= 122))) {
+			mat_counter++;
+			i++;
+		}
+	}
+////////////////////////////////////////////////
+	char** operations = new char*[op_counter];
+	double* numbers = new double [op_counter+2-mat_counter];
+	Matrix* mats = new Matrix[mat_counter+1];
+	int* keys = new int[op_counter+1]; 
+	int pos = 0;
+	int counter = 0;
+	int counter1 = 1;
+	int counter2 = 1;
+	string s1 ;
+	char* s2;
+	for(int i =0;i<s.length();i++){
+		if(s[i] =='+'||s[i] =='-'||s[i] =='*'||s[i] =='/'||s[i] =='^'||s[i] =='%'){
+			
+			s1 = s.substr(pos,i-pos);
+			operations[counter] = new char[2];
+			if(s1[s1.length()-1] == '.'){
+				operations[counter][0] = '.';
+				operations[counter][1] = s[i];
+				s1 = s.substr(pos,i-pos-1);			
+			}
+			else {
+				operations[counter][0] = '!';
+				operations[counter][1] = s[i];
+			}
+			
+			int ascii = (int) s1[0];
+			if(((ascii >= 65) && (ascii <= 90)) || ((ascii >= 97) && (ascii <= 122))) {
+				for(int j=0;j<ptr;j++){
+					if(matrices[j].name == s1[0])	{
+						mats[counter1] = matrices[j];	
+						mats[counter1].name = matrices[j].name;
+						break;
+					}			
+				}
+				keys[counter] = counter1;
+				counter1++;
+			}
+			else{
+				s2 = new char[s1.length()];
+				for(int k = 0;k<s1.length();k++){
+					s2[k] = s1[k];
+				}
+				numbers[counter2] = atof(s2);
+				keys[counter] = -1*counter2;
+				counter2++;
+			}
+			counter++;
+			pos = i+1;
+			if(s[i+1] == '-'){i++;}
+		}
+	}
+	
+	s1 = s.substr(pos,s.length()-pos);
+	int ascii = (int) s1[0];	
+	if(((ascii >= 65) && (ascii <= 90)) || ((ascii >= 97) && (ascii <= 122))) {
+		for(int j=0;j<ptr;j++){
+			if(matrices[j].name == s1[0])	{
+				mats[counter1] = matrices[j];	
+				mats[counter1].name = matrices[j].name;
+				break;
+			}			
+		}
+		keys[counter] = counter1;
+	}
+	else{
+		s2 = new char[s1.length()];
+		for(int k = 0;k<s1.length();k++){
+			s2[k] = s1[k];
+		}
+		numbers[counter2] = atof(s2);
+		keys[counter] = -1*counter2;
+	}
 
+///////////////////////////////////////////
+	for(int i =0;i<op_counter;i++){
+		if(operations[i][0] == '!'&&operations[i][1] == '^'){
+			if(keys[i]>0){
+				mats[keys[i]]=mats[keys[i]]^numbers[-1*keys[i+1]];
+			}
+			else if(keys[i] < 0){
+				numbers[-1*keys[i]] = pow(numbers[-1*keys[i]],numbers[-1*keys[i+1]]);
+			}
+			for(int j = i;j<op_counter-1;j++){
+				keys[j+1] = keys[j+2];
+				operations[j] = operations[j+1];
+			}
+			op_counter--;
+			i--;
+		}
+		else if(operations[i][0] == '.'&&operations[i][1] == '^'){
+			if(keys[i]>0){
+				mats[keys[i]]= mats[keys[i]].powerbyelement(numbers[-1*keys[i+1]]);
+			}
+			for(int j = i;j<op_counter-1;j++){
+				operations[j] = operations[j+1];
+				keys[j+1] = keys[j+2];
+			}
+			op_counter--;
+			i--;
+		}
+	}
+
+	for(int i =0;i<op_counter;i++){
+		if(operations[i][0] == '!'&&operations[i][1] == '*'){
+			if(keys[i]>0){
+				if(keys[i+1]>0){
+					mats[keys[i]]*=mats[keys[i+1]];
+				}
+				else if(keys[i+1]<0){
+					mats[keys[i]]*=numbers[-1*keys[i+1]];
+				}
+				for(int j = i;j<op_counter-1;j++){
+					keys[j+1] = keys[j+2];
+					operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+			else if(keys[i] < 0){
+				if(keys[i+1]>0){
+					mats[keys[i+1]]*=numbers[-1*keys[i]];
+				}
+				else if(keys[i+1]<0){
+					numbers[-1*keys[i+1]]*=numbers[-1*keys[i]];
+				}
+				for(int j = i;j<op_counter;j++){
+					keys[j] = keys[j+1];
+					if(j<op_counter-1)operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+		}
+		else if(operations[i][0] == '.'&&operations[i][1] == '*'){
+			if(keys[i]>0){
+				if(keys[i+1]<0){
+					mats[keys[i]]=mats[keys[i]].multiply_by_no(numbers[-1*keys[i+1]]);
+					for(int j = i;j<op_counter-1;j++){
+						keys[j+1] = keys[j+2];
+						operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+			}
+		}
+		else if(operations[i][0] == '!'&&operations[i][1] == '/'){
+			if(keys[i]>0){
+				if(keys[i+1]>0){
+					mats[keys[i]]/=mats[keys[i+1]];
+				}
+				else if(keys[i+1]<0){
+					mats[keys[i]]/=numbers[-1*keys[i+1]];
+				}
+				for(int j = i;j<op_counter-1;j++){
+					keys[j+1] = keys[j+2];
+					operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+			else if(keys[i] < 0){
+				if(keys[i+1]>0){
+					Matrix ma = mats[keys[i+1]];
+					mats[keys[i+1]] = Matrix(numbers[-1*keys[i]]);
+					mats[keys[i+1]]/= ma;
+					for(int j = i;j<op_counter;j++){
+						keys[j] = keys[j+1];
+						if(j<op_counter-1)operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+				else if(keys[i+1]<0){
+					numbers[-1*keys[i]]/=numbers[-1*keys[i+1]];
+					for(int j = i;j<op_counter-1;j++){
+						keys[j+1] = keys[j+2];
+						operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+				
+			}
+		}
+		else if(operations[i][0] == '.'&&operations[i][1] == '/'){
+			if(keys[i]>0){
+				if(keys[i+1]>0){
+					mats[keys[i]] = mats[keys[i]].matrix_divbymatrix(mats[keys[i]],mats[keys[i+1]]);
+					for(int j = i;j<op_counter-1;j++){
+						keys[j+1] = keys[j+2];
+						operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+				else if(keys[i+1]<0){
+					mats[keys[i]]=mats[keys[i]].divbyelement(numbers[-1*keys[i+1]]);
+					for(int j = i;j<op_counter-1;j++){
+						keys[j+1] = keys[j+2];
+						operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+			}
+			else if(keys[i]<0){
+				if(keys[i+1]>0){
+					for(int ba=0;ba<mats[keys[i+1]].num_rows;ba++)
+					  for(int bb=0;bb<mats[keys[i+1]].num_col;bb++)
+					  {
+					    mats[keys[i+1]].values[ba][bb]=numbers[-1*keys[i]]/mats[keys[i+1]].values[ba][bb];
+						
+					  }
+					for(int j = i;j<op_counter;j++){
+						keys[j] = keys[j+1];
+						if(j<op_counter-1)operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+			}
+		}
+	}
+
+	for(int i =0;i<op_counter;i++){
+		if(operations[i][0] == '!'&&operations[i][1] == '+'){
+			if(keys[i]>0){
+				if(keys[i+1]>0){
+					mats[keys[i]]+=mats[keys[i+1]];
+				}
+				else if(keys[i+1]<0){
+					mats[keys[i]]+=numbers[-1*keys[i+1]];
+				}
+				for(int j = i;j<op_counter-1;j++){
+					keys[j+1] = keys[j+2];
+					operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+			else if(keys[i] < 0){
+				if(keys[i+1]>0){
+					mats[keys[i+1]]+=numbers[-1*keys[i]];
+				}
+				else if(keys[i+1]<0){
+					numbers[-1*keys[i+1]]+=numbers[-1*keys[i]];
+				}
+				for(int j = i;j<op_counter;j++){
+					keys[j] = keys[j+1];
+					if(j<op_counter-1)operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+		}
+		else if(operations[i][0] == '.'&&operations[i][1] == '+'){
+			if(keys[i]>0){
+				if(keys[i+1]<0){
+					mats[keys[i]]=mats[keys[i]].addbyelement(numbers[-1*keys[i+1]]);
+					for(int j = i;j<op_counter-1;j++){
+						keys[j+1] = keys[j+2];
+						operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+			}
+		}
+		else if(operations[i][0] == '!'&&operations[i][1] == '-'){
+			if(keys[i]>0){
+				if(keys[i+1]>0){
+					mats[keys[i]]-=mats[keys[i+1]];
+				}
+				else if(keys[i+1]<0){
+					mats[keys[i]]+=(-1*numbers[-1*keys[i+1]]);
+				}
+				for(int j = i;j<op_counter-1;j++){
+					keys[j+1] = keys[j+2];
+					operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+			else if(keys[i] < 0){
+				if(keys[i+1]>0){
+					mats[keys[i+1]]+=(-1*numbers[-1*keys[i]]);
+				}
+				else if(keys[i+1]<0){
+					numbers[-1*keys[i+1]]+=(-1*numbers[-1*keys[i]]);
+				}
+				for(int j = i;j<op_counter;j++){
+					keys[j] = keys[j+1];
+					if(j<op_counter-1)operations[j] = operations[j+1];
+				}
+				op_counter--;
+				i--;
+			}
+		}
+		else if(operations[i][0] == '.'&&operations[i][1] == '-'){
+			if(keys[i]>0){
+				if(keys[i+1]<0){
+					mats[keys[i]]=mats[keys[i]].addbyelement(-1*numbers[-1*keys[i+1]]);
+					for(int j = i;j<op_counter-1;j++){
+						keys[j+1] = keys[j+2];
+						operations[j] = operations[j+1];
+					}
+					op_counter--;
+					i--;
+				}
+			}
+		}
+		
+	}
+	return mats[keys[0]];
+}
+
+Matrix bigOperationReduce(string s2,Matrix* matrices,int &ptr,int &taken){//don't pass ptr itself ,don't pass matrices itself,let taken zero 
+	int start = 0;
+	int end = 0;
+	string s("");
+	int ss = 0;
+	for(int i=0;i<s2.length();i++){
+		if(s2[i]==' '){
+			s+= s2.substr(ss,i-ss);
+			ss=i+1;
+		}
+	}
+	s+= s2.substr(ss,s2.length()-ss);
+	//cout<<s<<endl;
+	string alpha = "abcdefghijklmnopqrtuvwxyz";
+	string new_operation("");
+	for(int i = 0; i <s.length();i++){
+		int asci = (int) s[i];
+		int num1 = 0;
+		int num2 = 0;
+		if ((asci == 115)){
+			string tri_op ("");
+			tri_op += s[i];
+			int no1 = 0;
+			int no2 = 0;
+			for(int t = i+1;t < s.length();t++){
+				tri_op += s[t];
+				if(s[t] =='('){
+					no1++;
+				}
+				else if(s[t] == ')'){
+					no2++;
+				}
+				if(no1 > 0 && no1 == no2){
+					i = t ;
+					break;
+				}
+			}		
+			string tri_operator = tri_op.substr(0,tri_op.find("("));
+			string inner_op = tri_op.substr(tri_op.find("(")+1,tri_op.length()-(tri_op.find("(")+2));
+			Matrix inner_result = bigOperationReduce(inner_op,matrices,ptr,taken);
+			Matrix outer_result ;
+			if(tri_operator == "sin"){
+				outer_result = Sin(inner_result);
+			}
+			else if (tri_operator == "sqrt"){
+				outer_result = Sqrt(inner_result);
+			}
+			outer_result.name = alpha[taken];
+			taken++;
+			matrices[ptr] = outer_result;
+			ptr++;
+			new_operation += outer_result.name;
+		}
+		else if(s[i] == '('){
+			num1++;
+			start = i+1;
+			for(int j = i+1;j<s.length();j++){
+				if(s[j] == '('){
+					num1++;
+				}
+				else if (s[j] == ')'){
+					num2++;
+					if(num1 == num2){
+						end = j-1;
+						i = j ;
+						break;
+					}					
+				}
+			}
+			string smallOperation = s.substr(start,(end-start+1));
+			Matrix solution;
+			if(smallOperation.find('(') !=string::npos){
+				
+				solution = bigOperationReduce(smallOperation,matrices,ptr,taken);
+			}
+			else{
+				solution = operationReduce(smallOperation,matrices,ptr);
+			}
+			solution.name = alpha[taken];
+			taken++;
+			matrices[ptr] = solution;
+			ptr++;
+			new_operation += solution.name;
+		}
+		else{
+				new_operation += s[i];
+		}
+	 
+	}
+	//cout<<new_operation<<endl;
+	Matrix result = operationReduce(new_operation,matrices,ptr);
+	return result;	
+}
 
 int main(int argc, char*argv[])
 {
@@ -1099,221 +1525,19 @@ else if (lineType == 4)
 
 else
 
-{
-
-		char in1, in2, out, operation;
-	operationParsing(inputFileLines[i], in1, in2, out, operation);//function parses operation line to in1,in2,out,operation
-
-	switch (operation)
-
-	{
-
-
-						case '+':
-						{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-						string zero = "[]";
-						Matrix first;
-						Matrix second;
-						Matrix output;
-						output.name = out;
-						matrices[ptr] = output;
-						ptr++;
-
-
-						for (int i = 0; i < ptr; i++)
-						{
-							if (matrices[i].name == in1) {first = matrices[i];}
-							if (matrices[i].name == in2) second = matrices[i];
-							if (matrices[i].name == out)
-							{output = first + second;
-							 matrices[i] = output;
-
-								}
-						}
-
-							//cout<<out<<" = "<<endl;
-						//  cout<<matrices[ptr-1].name;
-							//print( matrices[ptr-1] );
-							//matrices[ptr].name=out;
-
-
-
-
-								break;}
-
-
-
-
-						case '-':
-
-					{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-					string zero = "[]";
-					Matrix first;
-					Matrix second;
-					Matrix output;
-					output.name = out;
-					matrices[ptr] = output;
-					ptr++;
-
-
-					for (int i = 0; i < ptr; i++)
-					{
-						if (matrices[i].name == in1) {first = matrices[i];}
-						if (matrices[i].name == in2) second = matrices[i];
-						if (matrices[i].name == out)
-						{output = first - second;
-						 matrices[i] = output;
-
-							}
-					}
-
-						//cout<<out<<" = "<<endl;
-					//  cout<<matrices[ptr-1].name;
-						//print( matrices[ptr-1] );
-						//matrices[ptr].name=out;
-
-
-
-
-							break;}
-
-						case '*':
-
-					/////////////////////////////put mulitplication function from matrix
-					{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-					string zero = "[]";
-					Matrix first;
-					Matrix second;
-					Matrix output;
-					output.name = out;
-					matrices[ptr] = output;
-					ptr++;
-
-
-					for (int i = 0; i < ptr; i++)
-					{
-
-						if (matrices[i].name == in1) {first = matrices[i];}
-						if (matrices[i].name == in2) second = matrices[i];
-						if (matrices[i].name == out)
-						{output = first * second;
-						 matrices[i] = output;
-
-							}
-					}
-
-						//cout<<out<<" = "<<endl;
-					//  cout<<matrices[ptr-1].name;
-						//print( matrices[ptr-1] );
-						//matrices[ptr-1].name=out;
-
-
-
-
-							break;}
-
-
-
-						case '/':
-						{////////////////////////////put function that subtract two matrices out = in1 - in2 and print
-						string zero = "[]";
-						Matrix first;
-						Matrix second;
-						Matrix output;
-						output.name = out;
-						matrices[ptr] = output;
-						ptr++;
-
-
-						for (int i = 0; i < ptr; i++)
-						{
-							if (matrices[i].name == in1) {first = matrices[i];}
-							if (matrices[i].name == in2) second = matrices[i];
-							if (matrices[i].name == out)
-							{output = first / second;
-							 matrices[i] = output;
-
-								}
-						}
-
-							//cout<<out<<" = "<<endl;
-							//print( matrices[ptr-1] );
-							//matrices[ptr-1].name=out;
-
-
-
-
-								break;}
-					////////////////////////////put division function
-
-
-
-						case '1':
-				{  string zero = "[]";
-						Matrix first;
-						Matrix second;
-						Matrix output;
-						output.name = out;
-						matrices[ptr] = output;
-						ptr++;
-
-
-						for (int i = 0; i < ptr; i++)
-						{
-							if (matrices[i].name == in1) {first = matrices[i];}
-							if (matrices[i].name == in2) second = matrices[i];
-							if (matrices[i].name == out)
-							{output =first.getTranspose();
-							// matrices[i] = output;
-
-								}
-						}
-
-							//cout<<out<<" = "<<endl;
-						//  cout<<matrices[ptr-1].name;
-							//print( matrices[ptr-1] );
-							//matrices[ptr-1].name=out;
-
-						break;}
-
-
-
-
-						case'.':
-						{
-													 int num = (int)in1 - 48;
-
-
-
-							/////////////////////////put division function tht divide num/matrix in2  = matrix out
-							string zero = "[]";
-							Matrix first(zero);
-							Matrix output(zero);
-							output.name = out;
-							matrices[ptr] = output;
-							ptr++;
-							for (int i = 0; i < ptr; i++)
-							{
-								if (matrices[i].name == in2) {first = matrices[i];}
-							}
-							output = first;
-								for(int r = 0; r<first.num_rows; r++ )
-								{
-										for(int c = 0; c<first.num_col; c++)
-										{
-											output.values[r][c] = num/first.values[r][c];
-										}
-								}
-								//matrices[ptr-1]=output;
-								//cout<<out<<" = "<<endl;
-								//print(output);
-								//matrices[ptr-1].name=out;
-
-
-							break;}
-
-	}
-
+{	
+	int newptr = ptr;
+	int taken = 0;
+	Matrix* newmatrices = new Matrix[100];
+	for(int i9 =0;i9<ptr;i9++){
+		newmatrices[i9] = matrices[i9]; 
+	} 
+	int start = inputFileLines[i].find('=');
+	string opStr = inputFileLines[i].substr(start+1);
+	Matrix result = bigOperationReduce(opStr,newmatrices,newptr,taken);
+          matrices[ptr] = result;
+          matrices[ptr].name = inputFileLines[i][0];
+          ptr++;
 }
 			// cout<<"loop mat_string: "<<i<<"      "<<matrices[i].getString()<<endl;
 			// cout<<"loop"<<i<<"      "<<inputFileLines[i]<<endl;

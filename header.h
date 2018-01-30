@@ -137,5 +137,8 @@ void swapRows(int r1, int r2);
 Matrix createIdentity(int size);
 Matrix getTranspose();
 Matrix operator^(int power);
-
+Matrix powerbyelement(int d);
+Matrix addbyelement(int d);
+Matrix divbyelement(double d);
+Matrix matrix_divbymatrix(Matrix &a, Matrix &b);
 };
